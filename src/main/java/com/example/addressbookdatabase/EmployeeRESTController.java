@@ -55,6 +55,7 @@ public class EmployeeRESTController {
     public ResponseEntity<String> createEmployee(@RequestBody Employee newEmployee) {
         newEmployee.setId(employees.getEmployees().size() + 1);
         employeeRepository.save(newEmployee);
+        System.out.println(newEmployee.toString());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
