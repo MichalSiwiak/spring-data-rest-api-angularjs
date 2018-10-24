@@ -1,47 +1,38 @@
-var app = angular.module('Chart', ['zingchart-angularjs'])
+var app = angular.module("UserManagement", []);
 
-    .filter('percentage', ['$filter', function ($filter) {
-        return function (input, decimals) {
-            return $filter('number')(input * 100, decimals) + '%';
-        };
-    }]);
-
-
-app.controller('MainController', function ($scope, $http) {
-
+//Controller Part
+app.controller("UserManagementController", function ($scope, $http) {
 
     //Initialize page with default data which is blank in this example
+    $scope.employees = [];
     $scope.form = {
-        futureValue: 100000,
-        yearsOfSavings: 10,
-        returnOnCapital: 4.45,
-        inflationRate: 0.51
+        id: -1,
+        firstName: "",
+        lastName: "",
+        email: ""
     };
-    _draw_chart();
+
+    //Now load the data from server
     _refreshPageData();
 
+    //HTTP POST/PUT methods for add/edit employee
+    $scope.submitEmployee = function () {
 
-    //HTTP GET methods
-    function _refreshPageData() {
-        $http.get('getdata')
-            .then(function (response) {
-                $scope.jsondata = response.data;
-                $scope.myJson.series[0].values = response.data.depositsList;
-                $scope.myJson.series[1].values = response.data.accumulatedCapitalsList;
-                $scope.myJson.scaleX.values = response.data.yearList;
-                console.log("status:" + response.status);
-            }).catch(function (response) {
-            console.error('Error occurred:', response.status, response.data);
-        }).finally(function () {
-            console.log("Task Finished.");
-        });
-    }
+        var method = "";
+        var url = "";
+        if ($scope.form.id == -1) {
+            //Id is absent so add employee - POST operation
+            method = "POST";
+            url = 'employees';
+        } else {
+            //If Id is present, it's edit operation - PUT operation
+            method = "PUT";
+            url = 'employees/' + $scope.form.id;
+        }
 
-    //HTTP POST methods
-    $scope.submitData = function () {
         $http({
-            method: "POST",
-            url: 'submit',
+            method: method,
+            url: url,
             data: angular.toJson($scope.form),
             headers: {
                 'Content-Type': 'application/json'
@@ -49,9 +40,39 @@ app.controller('MainController', function ($scope, $http) {
         }).then(_success, _error);
     };
 
-    function _success(response) {
+    //HTTP DELETE- delete employee by Id
+    $scope.removeEmployee = function (employee) {
+        $http({
+            method: 'DELETE',
+            url: 'employees/' + employee.id
+        }).then(_success, _error);
+    };
+
+    //In case of edit employee, populate form with employee data
+    $scope.editEmployee = function (employee) {
+        $scope.form.firstName = employee.firstName;
+        $scope.form.lastName = employee.lastName;
+        $scope.form.email = employee.email;
+        $scope.form.id = employee.id;
+    };
+
+    /* Private Methods */
+
+    //HTTP GET- get all employees collection
+    function _refreshPageData() {
+        $http({
+            method: 'GET',
+            url: 'employees'
+        }).then(function successCallback(response) {
+            $scope.employees = response.data.employees;
+        }, function errorCallback(response) {
+            console.log(response.statusText);
+        });
+    }
+
+    function _success() {
         _refreshPageData();
-        //_clearForm()
+        _clearForm()
     }
 
     function _error(response) {
@@ -60,56 +81,9 @@ app.controller('MainController', function ($scope, $http) {
 
     //Clear the form
     function _clearForm() {
-        $scope.form.futureValue = "";
-        $scope.form.yearsOfSavings = "";
-        $scope.form.returnOnCapital = "";
-        $scope.form.inflationRate = "";
+        $scope.form.firstName = "";
+        $scope.form.lastName = "";
+        $scope.form.email = "";
+        $scope.form.id = -1;
     };
-
-    //Drawing chart
-    function _draw_chart() {
-        $scope.myJson = {
-            backgroundColor: "",
-            legend: {
-                align: "right",
-                layout: "x2",
-                backgroundColor: "transparent",
-                borderColor: "transparent",
-                marker: {
-                    borderRadius: "50px",
-                    borderColor: "transparent"
-                },
-                item: {
-                    fontColor: "grey"
-                }
-
-            },
-            crosshairX: {
-                scaleLabel: {
-                    backgroundColor: "#fff",
-                    fontColor: "black"
-                },
-                plotLabel: {
-                    backgroundColor: "#434343",
-                    fontColor: "#FFF",
-                    _text: "Number of hits : %v"
-                }
-            },
-            scaleX: { values:  [] },
-            plot: {
-                lineWidth: "2px",
-                aspect: "line",
-                marker: {
-                    visible: false
-                }
-            },
-            type: 'line',
-            series: [{text: "Suma wpłat", values: [], lineColor: "#4AD8CC"}, {
-                text: "Zgromadzony kapitał",
-                lineColor: "#D8CD98",
-                values: []
-            }]
-        }
-    }
-
 });
