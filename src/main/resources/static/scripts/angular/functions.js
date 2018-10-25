@@ -4,30 +4,33 @@ var app = angular.module("UserManagement", []);
 app.controller("UserManagementController", function ($scope, $http) {
 
     //Initialize page with default data which is blank in this example
-    $scope.employees = [];
+    $scope.countries = [];
     $scope.form = {
         id: -1,
-        firstName: "",
-        lastName: "",
-        email: ""
+        name: "",
+        continent: "",
+        surfaceArea: "",
+        indepYear: "",
+        population: "",
+        lifeExpectancy: ""
     };
 
     //Now load the data from server
     _refreshPageData();
 
-    //HTTP POST/PUT methods for add/edit employee
-    $scope.submitEmployee = function () {
+    //HTTP POST/PUT methods for add/edit country
+    $scope.submitCountry = function () {
 
         var method = "";
         var url = "";
         if ($scope.form.id == -1) {
-            //Id is absent so add employee - POST operation
+            //Id is absent so add country - POST operation
             method = "POST";
-            url = 'employees';
+            url = 'countries';
         } else {
             //If Id is present, it's edit operation - PUT operation
             method = "PUT";
-            url = 'employees/' + $scope.form.id;
+            url = 'countries/' + $scope.form.id;
         }
 
         $http({
@@ -40,31 +43,34 @@ app.controller("UserManagementController", function ($scope, $http) {
         }).then(_success, _error);
     };
 
-    //HTTP DELETE- delete employee by Id
-    $scope.removeEmployee = function (employee) {
+    //HTTP DELETE- delete country by Id
+    $scope.removeCountry = function (country) {
         $http({
             method: 'DELETE',
-            url: 'employees/' + employee.id
+            url: 'countries/' + country.id
         }).then(_success, _error);
     };
 
-    //In case of edit employee, populate form with employee data
-    $scope.editEmployee = function (employee) {
-        $scope.form.firstName = employee.firstName;
-        $scope.form.lastName = employee.lastName;
-        $scope.form.email = employee.email;
-        $scope.form.id = employee.id;
+    //In case of edit country, populate form with country data
+    $scope.editCountry = function (country) {
+        $scope.form.name = country.name;
+        $scope.form.continent = country.continent;
+        $scope.form.population = country.population;
+        $scope.form.lifeExpectancy = country.lifeExpectancy;
+        $scope.form.surfaceArea = country.surfaceArea;
+        $scope.form.indepYear = country.indepYear;
+        $scope.form.id = country.id;
     };
 
     /* Private Methods */
 
-    //HTTP GET- get all employees collection
+    //HTTP GET- get all countries collection
     function _refreshPageData() {
         $http({
             method: 'GET',
-            url: 'employees'
+            url: 'countries'
         }).then(function successCallback(response) {
-            $scope.employees = response.data.employees;
+            $scope.countries = response.data.countries;
         }, function errorCallback(response) {
             console.log(response.statusText);
         });
@@ -81,9 +87,12 @@ app.controller("UserManagementController", function ($scope, $http) {
 
     //Clear the form
     function _clearForm() {
-        $scope.form.firstName = "";
-        $scope.form.lastName = "";
-        $scope.form.email = "";
+        $scope.form.name = "";
+        $scope.form.continent = "";
+        $scope.form.population = "";
+        $scope.form.lifeExpectancy = "";
+        $scope.form.surfaceArea = "";
+        $scope.form.indepYear = "";
         $scope.form.id = -1;
     };
 });

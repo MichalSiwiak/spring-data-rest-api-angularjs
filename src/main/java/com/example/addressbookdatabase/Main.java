@@ -1,3 +1,4 @@
+/*
 package com.example.addressbookdatabase;
 
 import org.jsoup.Jsoup;
@@ -64,16 +65,19 @@ public class Main {
 
         }
 
-       /* for (Value value : valueList) {
+       */
+/* for (Value value : valueList) {
             String url = "https://www.bankier.pl/gielda/notowania/akcje/" + value.getName() + "/podstawowe-dane";
             System.out.println(url);
             Document sector = Jsoup.connect(url).timeout(6000)
                     .get();
             String sectorName = sector.select("div#boxBasicData div.boxContent.boxTable td:not(.textBold.textNowrap)").get(2).text();
             sectors.put(value.getName(), sectorName);
-        }*/
+        }*//*
 
-        /*try {
+
+        */
+/*try {
             FileOutputStream fileOut =
                     new FileOutputStream("sectors.map");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -83,9 +87,11 @@ public class Main {
             System.out.printf("Serialized data is saved in /tmp/employee.ser");
         } catch (IOException i) {
             i.printStackTrace();
-        }*/
+        }*//*
 
-       /* System.out.println(nameList.size());
+
+       */
+/* System.out.println(nameList.size());
         System.out.println(lastPriceList.size());
         System.out.println(changeInNumberList.size());
         System.out.println(changeInPercentList.size());
@@ -94,6 +100,8 @@ public class Main {
         System.out.println(openingPriceList.size());
         System.out.println(maxList.size());
         System.out.println(minList.size());
-        System.out.println(timeList.size());*/
+        System.out.println(timeList.size());*//*
+
     }
 }
+*/

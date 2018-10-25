@@ -9,10 +9,16 @@
     <title>Spring Examples</title>
     <!-- Bootstrap core CSS -->
     <link href="scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="scripts/style.css">
     <script src="scripts/jquery/jquery.min.js"></script>
     <script src="scripts/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
     <script src="scripts/angular/functions.js"></script>
+    <!--sprawdzić te linki i usunać z projektu gotowe biblioteki tylko je podlinkować-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 
 <body ng-app="UserManagement" ng-controller="UserManagementController">
@@ -57,112 +63,143 @@
 <div class="py-5"></div>
 <div class="py-2">
     <div class="container">
-        <form ng-submit="submitEmployee()">
+        <form ng-submit="submitCountry()">
             <div class="row">
                 <div class="col-md-4" style="">
-                    <p class="lead text-muted">Save or edit data</p>
-                    <div class="form-group"><label>Email address</label> <input type="email" class="form-control"></div>
-                    <div class="form-group"><label>Password</label> <input type="password" class="form-control"></div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="form-group"><label>Name</label> <input type="text" class="form-control"
+                                                                       ng-model="form.name"></div>
+                    <div class="form-group"><label>Continent</label> <input type="text" class="form-control"
+                                                                            ng-model="form.continent"></div>
+                    <div class="form-group"><label>Surface area</label> <input type="number" class="form-control"
+                                                                               ng-model="form.surfaceArea"></div>
                 </div>
                 <div class="col-md-4" style="">
-                    <p class="lead text-muted">Filters</p>
-                    <div class="form-group"><label>Name Starts:</label> <input type="email" class="form-control"></div>
+                    <div class="form-group"><label>Independence year</label> <input type="number" class="form-control"
+                                                                                    ng-model="form.indepYear">
+                    </div>
+                    <div class="form-group"><label>Population</label> <input type="number" class="form-control"
+                                                                             ng-model="form.population"></div>
+                    <div class="form-group"><label>Life expectancy</label> <input type="number" class="form-control"
+                                                                                  ng-model="form.lifeExpectancy">
+                    </div>
+                </div>
+                <div class="col-md-4" style="">
+                    <div class="form-group"><label>Name Starts:</label> <input type="text" class="form-control"></div>
                     <div class="form-group"><label>Category</label> <select name="cars" class="form-control">
                         <option value="volvo">Volvo</option>
                         <option value="saab">Saab</option>
                         <option value="fiat" selected="">Fiat</option>
                         <option value="audi">Audi</option>
                     </select></div>
-                </div>
-                <div class="col-md-4" style="">
-                    <p class="lead text-muted">Ranges</p>
                     <label>Name Starts:
-                        <output name="ageOutputName" id="ageOutputId">24</output>
+                        <output name="ageOutputName" id="ageOutputId">52</output>
                     </label> <input type="range" class="custom-range" name="ageInputName" id="ageInputId" value="24"
-                                    min="1" max="100" oninput="ageOutputId.value = ageInputId.value" onchange="window.open('cokolwiek');">
-
+                                    min="1" max="100" oninput="ageOutputId.value = ageInputId.value"
+                                    onchange="window.open('cokolwiek');">
                 </div>
             </div>
+            <div class="col-md-4" style="">
+                <div class="row">
+                    <button type="submit" class="btn btn-success w-25">Save</button>
+                </div>
+            </div>
+        </form>
     </div>
-    </form>
-</div>
-</div>
-<div class="py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12" style="">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead-light">
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="employee in employees">
-                            <td>{{ employee.firstName }}</td>
-                            <td>{{ employee.lastName }}</td>
-                            <td>{{ employee.email }}</td>
-                            <td><a ng-click="editEmployee( employee )" class="button">Edit</a> | <a
-                                    ng-click="removeEmployee( employee )" class="button">Remove</a></td>
-                        </tr>
-                        </tbody>
-                    </table>
+    <div class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12" style="">
+                    <div class="table-wrapper-scroll-y">
+                        <table class="table">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Continent</th>
+                                <th>Surface area</th>
+                                <th>Independence</th>
+                                <th>Population</th>
+                                <th>Life expectancy</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="country in countries">
+                                <td>{{ country.name }}</td>
+                                <td>{{ country.continent }}</td>
+                                <td>{{ country.surfaceArea }}</td>
+                                <td>{{ country.indepYear }}</td>
+                                <td>{{ country.population }}</td>
+                                <td>{{ country.lifeExpectancy }}</td>
+                                <td>
+                                    <span data-placement="top" data-toggle="tooltip" title="Edit">
+                                        <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal"
+                                                ng-click="editCountry( country )"><span
+                                                class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                    </span>
+                                    <span data-placement="top" data-toggle="tooltip" title="Delete">
+                                        <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"
+                                                ng-click="removeCountry( country )"><span
+                                                class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="bg-dark text-white p-4">
-    <div class="container">
-        <div class="row">
-            <div class="p-4 col-md-4">
-                <h2 class="mb-4 text-secondary">Pingendo</h2>
-                <p class="text-white">A company for whatever you may need, from website prototyping to publishing</p>
+    <div class="bg-dark text-white p-4">
+        <div class="container">
+            <div class="row">
+                <div class="p-4 col-md-4">
+                    <h2 class="mb-4 text-secondary">Pingendo</h2>
+                    <p class="text-white">A company for whatever you may need, from website prototyping to
+                        publishing</p>
+                </div>
+                <div class="p-4 col-md-4">
+                    <h2 class="mb-4 text-secondary">Mapsite</h2>
+                    <ul class="list-unstyled">
+                        <a href="#" class="text-white">Home</a>
+                        <br>
+                        <a href="#" class="text-white">About us</a>
+                        <br>
+                        <a href="#" class="text-white">Our services</a>
+                        <br>
+                        <a href="#" class="text-white">Stories</a>
+                    </ul>
+                </div>
+                <div class="p-4 col-md-4">
+                    <h2 class="mb-4">Contact</h2>
+                    <p>
+                        <a href="tel:+246 - 542 550 5462" class="text-white">
+                            <i class="fa d-inline mr-3 text-secondary fa-phone"></i>+246 - 542 550 5462</a>
+                    </p>
+                    <p>
+                        <a href="mailto:info@pingendo.com" class="text-white">
+                            <i class="fa d-inline mr-3 text-secondary fa-envelope-o"></i>info@pingendo.com</a>
+                    </p>
+                    <p>
+                        <a href="https://goo.gl/maps/AUq7b9W7yYJ2" class="text-white" target="_blank">
+                            <i class="fa d-inline mr-3 fa-map-marker text-secondary"></i>365 Park Street, NY</a>
+                    </p>
+                </div>
             </div>
-            <div class="p-4 col-md-4">
-                <h2 class="mb-4 text-secondary">Mapsite</h2>
-                <ul class="list-unstyled">
-                    <a href="#" class="text-white">Home</a>
-                    <br>
-                    <a href="#" class="text-white">About us</a>
-                    <br>
-                    <a href="#" class="text-white">Our services</a>
-                    <br>
-                    <a href="#" class="text-white">Stories</a>
-                </ul>
-            </div>
-            <div class="p-4 col-md-4">
-                <h2 class="mb-4">Contact</h2>
-                <p>
-                    <a href="tel:+246 - 542 550 5462" class="text-white">
-                        <i class="fa d-inline mr-3 text-secondary fa-phone"></i>+246 - 542 550 5462</a>
-                </p>
-                <p>
-                    <a href="mailto:info@pingendo.com" class="text-white">
-                        <i class="fa d-inline mr-3 text-secondary fa-envelope-o"></i>info@pingendo.com</a>
-                </p>
-                <p>
-                    <a href="https://goo.gl/maps/AUq7b9W7yYJ2" class="text-white" target="_blank">
-                        <i class="fa d-inline mr-3 fa-map-marker text-secondary"></i>365 Park Street, NY</a>
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 mt-3">
-                <p class="text-center text-white">© Copyright 2017 Pingendo - All rights reserved. </p>
+            <div class="row">
+                <div class="col-md-12 mt-3">
+                    <p class="text-center text-white">© Copyright 2017 Pingendo - All rights reserved. </p>
+                </div>
             </div>
         </div>
     </div>
+    <pingendo onclick="window.open('https://pingendo.com/', '_blank')"
+              style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">
+        Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png"
+                                                class="d-block" alt="Pingendo logo" height="16"></pingendo>
 </div>
-<pingendo onclick="window.open('https://pingendo.com/', '_blank')"
-          style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">
-    Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block"
-                                            alt="Pingendo logo" height="16"></pingendo>
 </body>
 
 </html>

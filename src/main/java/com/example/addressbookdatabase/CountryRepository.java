@@ -2,5 +2,5 @@ package com.example.addressbookdatabase;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+public interface CountryRepository extends JpaRepository<Country, Integer> {
 }
