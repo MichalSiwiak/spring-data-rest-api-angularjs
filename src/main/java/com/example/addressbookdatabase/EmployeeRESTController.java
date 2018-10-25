@@ -26,6 +26,7 @@ public class EmployeeRESTController {
 
     @PostConstruct
     public void init() {
+        System.out.println("cokolwiek=========================");
     }
 
     //Utility methods for getting employee by id
