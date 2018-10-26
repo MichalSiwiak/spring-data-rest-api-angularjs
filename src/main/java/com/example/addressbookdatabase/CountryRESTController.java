@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.PostConstruct;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
+
+import static java.util.stream.Collectors.toList;
 
 @Controller
 public class CountryRESTController {
@@ -42,7 +45,7 @@ public class CountryRESTController {
         }
 
 
-        List<Country> byPopulationLessThan = countryRepository.findByPopulationLessThan(1000000);
+        List<Country> byPopulationLessThan = countryRepository.findByPopulationLessThan(5000000);
         for (Country country : byPopulationLessThan) {
             System.out.println(country.toString());
         }
@@ -51,6 +54,23 @@ public class CountryRESTController {
         for (Country country : europe) {
             System.out.println(country.toString());
         }
+
+
+        System.out.println("=================================");
+
+        List<Country> common =
+                byPopulationLessThan
+                .stream()
+                        .filter(europe::contains)
+                        .filter(europe::contains).
+                        collect(toList());
+
+        System.out.println(common.size());
+
+        for (Country country : common) {
+            System.out.println(country.toString());
+        }
+
 
         Integer maxPopulation = countryRepository.findMaxPopulation();
         System.out.println(maxPopulation);
@@ -85,6 +105,12 @@ public class CountryRESTController {
             e.printStackTrace();
             return;
         }*/
+    }
+
+    @RequestMapping(value = "/continents", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+    public ResponseEntity<List<String>> getAllContinentsJSON() {
+        List<String> continents = countryRepository.findDistinctContinents();
+        return new ResponseEntity<>(continents, HttpStatus.OK);
     }
 
     //Utility methods for getting country by id

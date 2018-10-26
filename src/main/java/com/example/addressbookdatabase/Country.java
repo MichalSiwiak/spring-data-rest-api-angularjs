@@ -3,6 +3,7 @@ package com.example.addressbookdatabase;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Country {
@@ -84,5 +85,24 @@ public class Country {
                 ", population=" + population +
                 ", lifeExpectancy=" + lifeExpectancy +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Country country = (Country) o;
+        return id == country.id &&
+                Double.compare(country.surfaceArea, surfaceArea) == 0 &&
+                indepYear == country.indepYear &&
+                population == country.population &&
+                Double.compare(country.lifeExpectancy, lifeExpectancy) == 0 &&
+                Objects.equals(name, country.name) &&
+                Objects.equals(continent, country.continent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, continent, surfaceArea, indepYear, population, lifeExpectancy);
     }
 }
