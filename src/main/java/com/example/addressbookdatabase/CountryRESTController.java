@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.PostConstruct;
 import java.sql.*;
+import java.util.List;
+import java.util.concurrent.Future;
 
 @Controller
 public class CountryRESTController {
@@ -27,6 +29,34 @@ public class CountryRESTController {
 
     @PostConstruct
     public void init() {
+
+        List<String> distinctByContinent = countryRepository.findDistinctContinents();
+
+        for (String continent : distinctByContinent) {
+            System.out.println(continent);
+        }
+
+        List<Country> countries = countryRepository.findByNameFree("");
+        for (Country country : countries) {
+            System.out.println(country.toString());
+        }
+
+
+        List<Country> byPopulationLessThan = countryRepository.findByPopulationLessThan(1000000);
+        for (Country country : byPopulationLessThan) {
+            System.out.println(country.toString());
+        }
+
+        List<Country> europe = countryRepository.findByContinentEquals("Europe");
+        for (Country country : europe) {
+            System.out.println(country.toString());
+        }
+
+        Integer maxPopulation = countryRepository.findMaxPopulation();
+        System.out.println(maxPopulation);
+
+
+
       /*  try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
