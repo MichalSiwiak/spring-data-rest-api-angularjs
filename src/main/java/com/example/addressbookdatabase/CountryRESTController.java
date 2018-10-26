@@ -22,6 +22,9 @@ import static java.util.stream.Collectors.toList;
 public class CountryRESTController {
 
     private CountryList countries;
+    private CountryList findByContinentList;
+
+
     private final CountryRepository countryRepository;
 
     @Autowired
@@ -32,8 +35,10 @@ public class CountryRESTController {
 
     @PostConstruct
     public void init() {
+        findByContinentList = new CountryList();
+        findByContinentList.setCountries(countryRepository.findAll());
 
-        List<String> distinctByContinent = countryRepository.findDistinctContinents();
+       /* List<String> distinctByContinent = countryRepository.findDistinctContinents();
 
         for (String continent : distinctByContinent) {
             System.out.println(continent);
@@ -60,7 +65,7 @@ public class CountryRESTController {
 
         List<Country> common =
                 byPopulationLessThan
-                .stream()
+                        .stream()
                         .filter(europe::contains)
                         .filter(europe::contains).
                         collect(toList());
@@ -75,7 +80,7 @@ public class CountryRESTController {
         Integer maxPopulation = countryRepository.findMaxPopulation();
         System.out.println(maxPopulation);
 
-
+*/
 
       /*  try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -113,6 +118,13 @@ public class CountryRESTController {
         return new ResponseEntity<>(continents, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/continent", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<String> findByContinent(@RequestBody String continent) {
+        this.findByContinentList.setCountries(countryRepository.findByContinentEquals(continent));
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     //Utility methods for getting country by id
     private Country getCountryById(int id) {
         for (Country c : countries.getCountries()) {
@@ -130,6 +142,14 @@ public class CountryRESTController {
     public ResponseEntity<CountryList> getAllCountriesJSON() {
         countries = new CountryList();
         countries.setCountries(countryRepository.findAll());
+
+        List<Country> common = countries.getCountries()
+                .stream()
+                .filter(findByContinentList.getCountries()::contains)
+                .collect(toList());
+
+        countries.setCountries(common);
+
         return new ResponseEntity<>(countries, HttpStatus.OK);
     }
 

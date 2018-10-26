@@ -36,7 +36,7 @@ app.controller("UserManagementController", function ($scope, $http) {
             headers: {
                 'Content-Type': 'text/plain'
             }
-        }).then(_error);
+        }).then(_success, _error);
     };
 
     function _getAllContinents() {
