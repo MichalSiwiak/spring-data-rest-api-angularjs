@@ -15,8 +15,27 @@ app.controller("UserManagementController", function ($scope, $http) {
         lifeExpectancy: ""
     };
 
+    $scope.records = [
+        "Alfreds Futterkiste",
+        "Berglunds snabbköp",
+        "Centro comercial Moctezuma",
+        "Ernst Handel",
+    ]
+
     //Now load the data from server
     _refreshPageData();
+    _getAllContinents();
+
+    function _getAllContinents() {
+        $http({
+            method: 'GET',
+            url: 'continents'
+        }).then(function successCallback(response) {
+            $scope.records = response.data;
+        }, function errorCallback(response) {
+            console.log(response.statusText);
+        });
+    }
 
     //HTTP POST/PUT methods for add/edit country
     $scope.submitCountry = function () {
