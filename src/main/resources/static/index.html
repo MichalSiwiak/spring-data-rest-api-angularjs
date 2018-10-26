@@ -85,7 +85,7 @@
                 </div>
                 <div class="col-md-4" style="">
                     <div class="form-group"><label>Name Starts:</label> <input type="text" class="form-control"></div>
-                    <div class="form-group"><label>Category</label> <select name="cars" class="form-control">
+                    <div class="form-group"><label>Category</label> <select ng-model="record" name="cars" class="form-control" ng-change="submitRecord()">
                         <option ng-repeat="x in records">{{x}}</option>
                     </select></div>
                     <label>Name Starts:
