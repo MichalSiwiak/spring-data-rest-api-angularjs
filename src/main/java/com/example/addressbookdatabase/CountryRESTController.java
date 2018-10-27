@@ -26,7 +26,7 @@ public class CountryRESTController {
     private CountryList countries;
     private CountryList findByContinentList;
     private CountryList findByNameLikeList;
-
+    private CountryList findByPopulationLessThanList;
 
     private final CountryRepository countryRepository;
 
@@ -42,44 +42,16 @@ public class CountryRESTController {
         findByContinentList.setCountries(countryRepository.findAll());
         findByNameLikeList = new CountryList();
         findByNameLikeList.setCountries(countryRepository.findAll());
+        findByPopulationLessThanList = new CountryList();
+        findByPopulationLessThanList.setCountries(countryRepository.findAll());
+    }
 
-/*
-        List<Country> byPopulationLessThan = countryRepository.findByPopulationLessThan(5000000);
-        for (Country country : byPopulationLessThan) {
-            System.out.println(country.toString());
-        }
-
-        Integer maxPopulation = countryRepository.findMaxPopulation();
-        System.out.println(maxPopulation);*/
-
-      /*  try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        Connection connection = null;
-        try {
-            connection = DriverManager
-                    .getConnection("jdbc:mysql://localhost:3306/world", "root", "pass");
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select  * from country;");
-
-            while (resultSet.next()) {
-                Country country = new Country();
-                country.setName(resultSet.getString("Name"));
-                country.setContinent(resultSet.getString("Continent"));
-                country.setSurfaceArea(resultSet.getDouble("SurfaceArea"));
-                country.setIndepYear(resultSet.getInt("IndepYear"));
-                country.setPopulation(resultSet.getInt("Population"));
-                country.setLifeExpectancy(resultSet.getDouble("LifeExpectancy"));
-                countryRepository.save(country);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return;
-        }*/
+    @RequestMapping(value = "/population", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<String> findByPopulationLessThan(@RequestBody String population) {
+        findByPopulationLessThanList
+                .setCountries(countryRepository
+                        .findByPopulationLessThan(Integer.parseInt(population)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/continents", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
@@ -133,6 +105,7 @@ public class CountryRESTController {
                 .stream()
                 .filter(findByContinentList.getCountries()::contains)
                 .filter(findByNameLikeList.getCountries()::contains)
+                .filter(findByPopulationLessThanList.getCountries()::contains)
                 .collect(toList());
 
         countries.setCountries(common);
@@ -167,10 +140,8 @@ public class CountryRESTController {
             countryToUpdate.setSurfaceArea(country.getSurfaceArea());
 
             countryRepository.save(countryToUpdate);
-            System.out.println(countryToUpdate.toString());
             return new ResponseEntity<>(countryToUpdate, HttpStatus.OK);
         }
-        System.out.println(countryToUpdate.toString());
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

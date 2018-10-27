@@ -93,10 +93,11 @@
                         <option ng-repeat="x in records">{{x}}</option>
                     </select></div>
                     <label>Name Starts:
-                        <output name="ageOutputName" id="ageOutputId">52</output>
-                    </label> <input type="range" class="custom-range" name="ageInputName" id="ageInputId" value="24"
-                                    min="1" max="100" oninput="ageOutputId.value = ageInputId.value"
-                                    onchange="window.open('cokolwiek');">
+                        <output name="ageOutputName" id="ageOutputId">2000000000</output>
+                    </label> <input type="range" class="custom-range" name="ageInputName" id="ageInputId"
+                                    min="0" max="2000000000" step="1000" oninput="ageOutputId.value = ageInputId.value"
+                                    ng-change="submitPopulationL()" ng-model="populationL"
+                                    ng-model-options="{updateOn: 'blur mouseup'}">
                 </div>
             </div>
             <div class="col-md-4" style="">

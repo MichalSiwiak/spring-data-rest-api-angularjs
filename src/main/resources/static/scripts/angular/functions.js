@@ -7,6 +7,7 @@ app.controller("UserManagementController", function ($scope, $http) {
     $scope.countries = [];
     $scope.record = "";
     $scope.name = "";
+    $scope.populationL = "2000000000";
 
     $scope.form = {
         id: -1,
@@ -29,6 +30,17 @@ app.controller("UserManagementController", function ($scope, $http) {
     _refreshPageData();
     _getAllContinents();
 
+    $scope.submitPopulationL = function () {
+        $http({
+            method: "POST",
+            url: 'population',
+            data: $scope.populationL,
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        }).then(_success, _error);
+    };
+
     $scope.submitName = function () {
         if ($scope.name != "") {
             $http({
@@ -39,7 +51,7 @@ app.controller("UserManagementController", function ($scope, $http) {
                     'Content-Type': 'text/plain'
                 }
             }).then(_success, _error);
-        }else{
+        } else {
             $http({
                 method: "POST",
                 url: 'name',

@@ -1,7 +1,5 @@
 package com.example.addressbookdatabase;
 
-import org.springframework.context.annotation.Scope;
-
 import java.util.List;
 
 
