@@ -43,37 +43,14 @@ public class CountryRESTController {
         findByNameLikeList = new CountryList();
         findByNameLikeList.setCountries(countryRepository.findAll());
 
+/*
         List<Country> byPopulationLessThan = countryRepository.findByPopulationLessThan(5000000);
         for (Country country : byPopulationLessThan) {
             System.out.println(country.toString());
         }
 
-        List<Country> europe = countryRepository.findByContinentEquals("Europe");
-        for (Country country : europe) {
-            System.out.println(country.toString());
-        }
-
-
-        System.out.println("=================================");
-
-        List<Country> common =
-                byPopulationLessThan
-                        .stream()
-                        .filter(europe::contains)
-                        .filter(europe::contains).
-                        collect(toList());
-
-        System.out.println(common.size());
-
-        for (Country country : common) {
-            System.out.println(country.toString());
-        }
-
-
         Integer maxPopulation = countryRepository.findMaxPopulation();
-        System.out.println(maxPopulation);
-
-*/
+        System.out.println(maxPopulation);*/
 
       /*  try {
             Class.forName("com.mysql.jdbc.Driver");
