@@ -1,9 +1,11 @@
 package com.example.addressbookdatabase;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,7 @@ public class CountryRESTController {
 
     private CountryList countries;
     private CountryList findByContinentList;
+    private CountryList findByNameLikeList;
 
 
     private final CountryRepository countryRepository;
@@ -37,18 +40,8 @@ public class CountryRESTController {
     public void init() {
         findByContinentList = new CountryList();
         findByContinentList.setCountries(countryRepository.findAll());
-
-       /* List<String> distinctByContinent = countryRepository.findDistinctContinents();
-
-        for (String continent : distinctByContinent) {
-            System.out.println(continent);
-        }
-
-        List<Country> countries = countryRepository.findByNameFree("");
-        for (Country country : countries) {
-            System.out.println(country.toString());
-        }
-
+        findByNameLikeList = new CountryList();
+        findByNameLikeList.setCountries(countryRepository.findAll());
 
         List<Country> byPopulationLessThan = countryRepository.findByPopulationLessThan(5000000);
         for (Country country : byPopulationLessThan) {
@@ -115,13 +108,27 @@ public class CountryRESTController {
     @RequestMapping(value = "/continents", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
     public ResponseEntity<List<String>> getAllContinentsJSON() {
         List<String> continents = countryRepository.findDistinctContinents();
+        continents.add("ALL");
         return new ResponseEntity<>(continents, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/name", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<String> findByNameLike(@RequestBody String name) {
+        if (name.equals("all")) {
+            findByNameLikeList.setCountries(countryRepository.findAll());
+        } else {
+            findByNameLikeList.setCountries(countryRepository.findByNameLike(name));
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/continent", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
     public ResponseEntity<String> findByContinent(@RequestBody String continent) {
-        this.findByContinentList.setCountries(countryRepository.findByContinentEquals(continent));
-
+        if (continent.equals("ALL")) {
+            findByContinentList.setCountries(countryRepository.findAll());
+        } else {
+            findByContinentList.setCountries(countryRepository.findByContinentEquals(continent));
+        }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -143,9 +150,12 @@ public class CountryRESTController {
         countries = new CountryList();
         countries.setCountries(countryRepository.findAll());
 
-        List<Country> common = countries.getCountries()
+        List<Country> common = new ArrayList<>();
+
+        common = countries.getCountries()
                 .stream()
                 .filter(findByContinentList.getCountries()::contains)
+                .filter(findByNameLikeList.getCountries()::contains)
                 .collect(toList());
 
         countries.setCountries(common);

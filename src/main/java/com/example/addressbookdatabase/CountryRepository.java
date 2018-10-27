@@ -12,7 +12,7 @@ public interface CountryRepository extends JpaRepository<Country, Integer> {
     List<String> findDistinctContinents();
 
     @Query("select c from Country c where lower(c.name) like lower(concat('%', :nameToFind,'%'))")
-    List<Country> findByNameFree(@Param("nameToFind") String name);
+    List<Country> findByNameLike(@Param("nameToFind") String name);
 
     @Query("select max(c.population) from Country c")
     Integer findMaxPopulation();

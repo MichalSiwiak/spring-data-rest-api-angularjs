@@ -6,6 +6,7 @@ app.controller("UserManagementController", function ($scope, $http) {
     //Initialize page with default data which is blank in this example
     $scope.countries = [];
     $scope.record = "";
+    $scope.name = "";
 
     $scope.form = {
         id: -1,
@@ -27,6 +28,28 @@ app.controller("UserManagementController", function ($scope, $http) {
     //Now load the data from server
     _refreshPageData();
     _getAllContinents();
+
+    $scope.submitName = function () {
+        if ($scope.name != "") {
+            $http({
+                method: "POST",
+                url: 'name',
+                data: $scope.name,
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            }).then(_success, _error);
+        }else{
+            $http({
+                method: "POST",
+                url: 'name',
+                data: 'all',
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            }).then(_success, _error);
+        }
+    };
 
     $scope.submitRecord = function () {
         $http({
