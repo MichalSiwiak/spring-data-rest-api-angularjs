@@ -101,12 +101,16 @@ public class CountryRESTController {
 
         List<Country> common = new ArrayList<>();
 
-        common = countries.getCountries()
-                .stream()
-                .filter(findByContinentList.getCountries()::contains)
-                .filter(findByNameLikeList.getCountries()::contains)
-                .filter(findByPopulationLessThanList.getCountries()::contains)
-                .collect(toList());
+        try {
+            common = countries.getCountries()
+                    .stream()
+                    .filter(findByContinentList.getCountries()::contains)
+                    .filter(findByNameLikeList.getCountries()::contains)
+                    .filter(findByPopulationLessThanList.getCountries()::contains)
+                    .collect(toList());
+
+        } catch (Exception e) {
+        }
 
         countries.setCountries(common);
 
