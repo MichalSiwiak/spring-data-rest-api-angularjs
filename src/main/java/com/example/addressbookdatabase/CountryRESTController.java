@@ -1,5 +1,6 @@
 package com.example.addressbookdatabase;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.annotation.PostConstruct;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -99,6 +101,10 @@ public class CountryRESTController {
         countries = new CountryList();
         countries.setCountries(countryRepository.findAll());
 
+        //countries.setCountries(countryRepository.findAll());
+        //System.out.println("countries: "+countries.getCountries().toString());
+        //List<Country> all = countryRepository.findAll();
+
         List<Country> common = new ArrayList<>();
 
         try {
@@ -114,6 +120,15 @@ public class CountryRESTController {
 
         countries.setCountries(common);
 
+        System.out.println("countries: "+countries.getCountries().toString());
+        System.out.println("findByContinentList :"+findByContinentList.getCountries().toString());
+        System.out.println("findByNameLikeList :"+findByNameLikeList.getCountries().toString());
+        System.out.println("findByPopulationLessThanList: "+findByPopulationLessThanList.getCountries().toString());
+        //System.out.println("common: "+common.toString());
+        System.out.println("====================================================================");
+
+
+
         return new ResponseEntity<>(countries, HttpStatus.OK);
     }
 
@@ -124,6 +139,10 @@ public class CountryRESTController {
     public ResponseEntity<String> createCountry(@RequestBody Country newCountry) {
         newCountry.setId(countries.getCountries().size() + 1);
         countryRepository.save(newCountry);
+        findByContinentList.setCountries(countryRepository.findAll());
+        findByNameLikeList.setCountries(countryRepository.findAll());
+        findByPopulationLessThanList.setCountries(countryRepository.findAll());
+        System.out.println(newCountry.toString());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -144,6 +163,7 @@ public class CountryRESTController {
             countryToUpdate.setSurfaceArea(country.getSurfaceArea());
 
             countryRepository.save(countryToUpdate);
+            //System.out.println(countryToUpdate.toString());
             return new ResponseEntity<>(countryToUpdate, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -157,6 +177,7 @@ public class CountryRESTController {
         Country countryToDelete = getCountryById(id);
         if (countryToDelete != null) {
             countryRepository.delete(countryToDelete);
+            System.out.println(countryToDelete.toString());
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

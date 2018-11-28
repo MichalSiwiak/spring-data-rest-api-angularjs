@@ -2,12 +2,16 @@ package com.example.addressbookdatabase;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
 public class Country {
 
+
+    @Id
+    @GeneratedValue
     private int id;
     private String name;
     private String continent;
@@ -16,8 +20,6 @@ public class Country {
     private int population;
     private double lifeExpectancy;
 
-    @Id
-    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -92,17 +94,11 @@ public class Country {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Country country = (Country) o;
-        return id == country.id &&
-                Double.compare(country.surfaceArea, surfaceArea) == 0 &&
-                indepYear == country.indepYear &&
-                population == country.population &&
-                Double.compare(country.lifeExpectancy, lifeExpectancy) == 0 &&
-                Objects.equals(name, country.name) &&
-                Objects.equals(continent, country.continent);
+        return id == country.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, continent, surfaceArea, indepYear, population, lifeExpectancy);
+        return Objects.hash(id);
     }
 }
