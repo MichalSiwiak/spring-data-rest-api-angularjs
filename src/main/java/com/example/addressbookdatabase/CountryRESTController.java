@@ -120,13 +120,12 @@ public class CountryRESTController {
 
         countries.setCountries(common);
 
-        System.out.println("countries: "+countries.getCountries().toString());
-        System.out.println("findByContinentList :"+findByContinentList.getCountries().toString());
-        System.out.println("findByNameLikeList :"+findByNameLikeList.getCountries().toString());
-        System.out.println("findByPopulationLessThanList: "+findByPopulationLessThanList.getCountries().toString());
+        System.out.println("countries: " + countries.getCountries().toString());
+        System.out.println("findByContinentList :" + findByContinentList.getCountries().toString());
+        System.out.println("findByNameLikeList :" + findByNameLikeList.getCountries().toString());
+        System.out.println("findByPopulationLessThanList: " + findByPopulationLessThanList.getCountries().toString());
         //System.out.println("common: "+common.toString());
         System.out.println("====================================================================");
-
 
 
         return new ResponseEntity<>(countries, HttpStatus.OK);
@@ -151,7 +150,14 @@ public class CountryRESTController {
      */
     @RequestMapping(value = "/countries/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
     public ResponseEntity<Country> updateCountry(@PathVariable("id") int id, @RequestBody Country country) {
-        Country countryToUpdate = getCountryById(id);
+
+        Country countryToUpdate = new Country();
+        try {
+            countryToUpdate = getCountryById(id);
+        } catch (Exception e) {
+            System.out.println("Error fetching data");
+        }
+
 
         if (countryToUpdate != null) {
 
@@ -174,12 +180,20 @@ public class CountryRESTController {
      */
     @RequestMapping(value = "/countries/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteCountry(@PathVariable("id") int id) {
-        Country countryToDelete = getCountryById(id);
-        if (countryToDelete != null) {
-            countryRepository.delete(countryToDelete);
-            System.out.println(countryToDelete.toString());
-            return new ResponseEntity<>(HttpStatus.OK);
+
+        Country countryToDelete;
+        try {
+            countryToDelete = getCountryById(id);
+            if (countryToDelete != null) {
+                countryRepository.delete(countryToDelete);
+                System.out.println(countryToDelete.toString());
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching data");
         }
+
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
