@@ -1,1 +1,1 @@
-# spring-data-rest-api-angularjs
+# spring-mvc-example-tomcat
