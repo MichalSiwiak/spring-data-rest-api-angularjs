@@ -78,7 +78,6 @@ public class CountryRESTController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //Utility methods for getting country by id
     private Country getCountryById(int id) {
         for (Country c : countries.getCountries()) {
             if (c.getId() == id) {
@@ -96,10 +95,6 @@ public class CountryRESTController {
         countries = new CountryList();
         countries.setCountries(countryService.findAll());
 
-        //countries.setCountries(countryRepository.findAll());
-        //System.out.println("countries: "+countries.getCountries().toString());
-        //List<Country> all = countryRepository.findAll();
-
         List<Country> common = new ArrayList<>();
 
         try {
@@ -115,14 +110,6 @@ public class CountryRESTController {
 
         countries.setCountries(common);
 
-        System.out.println("countries: " + countries.getCountries().toString());
-        System.out.println("findByContinentList :" + findByContinentList.getCountries().toString());
-        System.out.println("findByNameLikeList :" + findByNameLikeList.getCountries().toString());
-        System.out.println("findByPopulationLessThanList: " + findByPopulationLessThanList.getCountries().toString());
-        //System.out.println("common: "+common.toString());
-        System.out.println("====================================================================");
-
-
         return new ResponseEntity<>(countries, HttpStatus.OK);
     }
 
@@ -136,7 +123,7 @@ public class CountryRESTController {
         findByContinentList.setCountries(countryService.findAll());
         findByNameLikeList.setCountries(countryService.findAll());
         findByPopulationLessThanList.setCountries(countryService.findAll());
-        System.out.println(newCountry.toString());
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -164,7 +151,6 @@ public class CountryRESTController {
             countryToUpdate.setSurfaceArea(country.getSurfaceArea());
 
             countryService.saveCountry(countryToUpdate);
-            //System.out.println(countryToUpdate.toString());
             return new ResponseEntity<>(countryToUpdate, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -181,13 +167,11 @@ public class CountryRESTController {
             countryToDelete = getCountryById(id);
             if (countryToDelete != null) {
                 countryService.deleteCountry(countryToDelete);
-                System.out.println(countryToDelete.toString());
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         } catch (Exception e) {
             System.out.println("Error fetching data");
         }
-
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

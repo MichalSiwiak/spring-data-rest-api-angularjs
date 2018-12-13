@@ -156,7 +156,7 @@
             <div class="row">
                 <div class="col-md-12" style="">
                     <div class="table-wrapper-scroll-y">
-                        <table class="table">
+                        <table class="table table-striped">
                             <thead class="thead-light">
                             <tr class="text-center">
                                 <th>Name</th>
@@ -179,7 +179,7 @@
                                 <td class="text-center">
                                     <a class="btn btn-sm text-dark btn-primary" ng-click="editCountry( country )"><i
                                             class="fa fa-pencil-square-o fa-lg text-dark" aria-hidden="true"></i></a>
-                                    <a class="btn btn-sm text-dark btn-warning" ng-click="editCountry( country )"><i
+                                    <a class="btn btn-sm text-dark btn-warning" ng-click="removeCountry( country )"><i
                                             class="fa fa-trash fa-lg text-dark" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
