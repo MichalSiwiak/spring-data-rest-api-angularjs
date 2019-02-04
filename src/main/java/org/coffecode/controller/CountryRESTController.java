@@ -175,4 +175,9 @@ public class CountryRESTController {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/error")
+    public String showErrorPage() {
+        return "error-page";
+    }
 }
