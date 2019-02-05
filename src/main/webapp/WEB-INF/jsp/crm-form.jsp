@@ -148,10 +148,10 @@
                             <div class="form-group"><label>Name Starts:</label> <input type="text" ng-model="name"
                                                                                        ng-change="submitName()"
                                                                                        class="form-control"></div>
-                            <div class="form-group"><label>Category</label> <select ng-model="record" value="cokolwiek"
+                            <div class="form-group"><label>Category</label> <select ng-model="sales" value="cokolwiek"
                                                                                     name="cars" class="form-control"
-                                                                                    ng-change="submitRecord()">
-                                <option ng-repeat="x in records">{{x}}</option>
+                                                                                    ng-change="submitsales()">
+                                <option ng-repeat="x in saless">{{x}}</option>
                             </select></div>
                             <label>Name Starts:
                                 <output name="ageOutputName" id="ageOutputId" class="mb-2">835031000</output>

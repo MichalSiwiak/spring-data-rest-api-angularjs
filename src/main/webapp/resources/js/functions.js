@@ -5,7 +5,7 @@ app.controller("UserManagementController", function ($scope, $http) {
 
     //Initialize page with default data which is blank in this example
     $scope.countries = [];
-    $scope.record = "";
+    $scope.sales = "";
     $scope.name = "";
     $scope.populationL = "2000000000";
 
@@ -56,11 +56,11 @@ app.controller("UserManagementController", function ($scope, $http) {
         }
     };
 
-    $scope.submitRecord = function () {
+    $scope.submitsales = function () {
         $http({
             method: "POST",
             url: '/crm/demo/continent',
-            data: $scope.record,
+            data: $scope.sales,
             headers: {
                 'Content-Type': 'text/plain'
             }
@@ -72,7 +72,7 @@ app.controller("UserManagementController", function ($scope, $http) {
             method: 'GET',
             url: '/crm/demo/continents'
         }).then(function successCallback(response) {
-            $scope.records = response.data;
+            $scope.saless = response.data;
         }, function errorCallback(response) {
             console.log(response.statusText);
         });
