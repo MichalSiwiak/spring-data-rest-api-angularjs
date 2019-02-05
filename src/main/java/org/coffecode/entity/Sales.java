@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 
 @Entity
@@ -15,27 +16,53 @@ public class Sales {
     @GeneratedValue
     private long id;
 
-    private String region;
+   /* private String region;*/
     private String country;
     private String itemType;
-    private String salesChannel;
+   /* private String salesChannel;*/
     private String orderPriority;
-    private Timestamp orderDate;
-    private String orderId;
-    private Timestamp shipDate;
+   /* private Timestamp orderDate;*/
+   /* private String orderId;*/
+   /* private Timestamp shipDate;*/
     private int unitsSold;
     private double unitsPrice;
-    private double unitsCost;
-    private double totalRevenue;
+    /*private double unitsCost;
+    private double totalRevenue;*/
     private double totalCost;
-    private double totalProfit;
+   /* private double totalProfit;*/
 
-    public String getRegion() {
-        return region;
+    @Override
+    public String toString() {
+        return "Sales{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", itemType='" + itemType + '\'' +
+                ", orderPriority='" + orderPriority + '\'' +
+                ", unitsSold=" + unitsSold +
+                ", unitsPrice=" + unitsPrice +
+                ", totalCost=" + totalCost +
+                '}';
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sales sales = (Sales) o;
+        return id == sales.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getCountry() {
@@ -54,44 +81,12 @@ public class Sales {
         this.itemType = itemType;
     }
 
-    public String getSalesChannel() {
-        return salesChannel;
-    }
-
-    public void setSalesChannel(String salesChannel) {
-        this.salesChannel = salesChannel;
-    }
-
     public String getOrderPriority() {
         return orderPriority;
     }
 
     public void setOrderPriority(String orderPriority) {
         this.orderPriority = orderPriority;
-    }
-
-    public Timestamp getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Timestamp orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public Timestamp getShipDate() {
-        return shipDate;
-    }
-
-    public void setShipDate(Timestamp shipDate) {
-        this.shipDate = shipDate;
     }
 
     public int getUnitsSold() {
@@ -110,55 +105,11 @@ public class Sales {
         this.unitsPrice = unitsPrice;
     }
 
-    public double getUnitsCost() {
-        return unitsCost;
-    }
-
-    public void setUnitsCost(double unitsCost) {
-        this.unitsCost = unitsCost;
-    }
-
-    public double getTotalRevenue() {
-        return totalRevenue;
-    }
-
-    public void setTotalRevenue(double totalRevenue) {
-        this.totalRevenue = totalRevenue;
-    }
-
     public double getTotalCost() {
         return totalCost;
     }
 
     public void setTotalCost(double totalCost) {
         this.totalCost = totalCost;
-    }
-
-    public double getTotalProfit() {
-        return totalProfit;
-    }
-
-    public void setTotalProfit(double totalProfit) {
-        this.totalProfit = totalProfit;
-    }
-
-    @Override
-    public String toString() {
-        return "sales{" +
-                "region='" + region + '\'' +
-                ", country='" + country + '\'' +
-                ", itemType='" + itemType + '\'' +
-                ", salesChannel='" + salesChannel + '\'' +
-                ", orderPriority='" + orderPriority + '\'' +
-                ", orderDate=" + orderDate +
-                ", orderId='" + orderId + '\'' +
-                ", shipDate=" + shipDate +
-                ", unitsSold=" + unitsSold +
-                ", unitsPrice=" + unitsPrice +
-                ", unitsCost=" + unitsCost +
-                ", totalRevenue=" + totalRevenue +
-                ", totalCost=" + totalCost +
-                ", totalProfit=" + totalProfit +
-                '}';
     }
 }

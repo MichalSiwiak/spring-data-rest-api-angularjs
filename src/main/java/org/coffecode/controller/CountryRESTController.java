@@ -38,10 +38,10 @@ public class CountryRESTController {
         findByPopulationLessThanList.setCountries(countryService.findAll());
     }
 
-    @GetMapping("/demo")
+   /* @GetMapping("/demo")
     public String getDemo(){
         return "crm-form";
-    }
+    }*/
 
     @RequestMapping(value = "/demo/population", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
     public ResponseEntity<String> findByPopulationLessThan(@RequestBody String population) {
