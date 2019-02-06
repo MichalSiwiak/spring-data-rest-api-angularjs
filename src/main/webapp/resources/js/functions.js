@@ -64,6 +64,8 @@ app.controller("SalesManagementController", function ($scope, $http) {
             url: '/crm/demo/sales'
         }).then(function successCallback(response) {
             $scope.salesList = response.data.salesList;
+            console.log(response.headers('rowsNumberMessage'));
+            console.log(response.headers('rowsNumberMessage'));
         }, function errorCallback(response) {
             console.log(response.statusText);
         });
