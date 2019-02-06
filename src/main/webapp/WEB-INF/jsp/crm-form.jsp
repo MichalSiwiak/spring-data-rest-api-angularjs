@@ -121,25 +121,23 @@
                         <div class="col-md-12 mb-3 text-center"><label>Type Country Like:</label>
                             <input type="text" ng-model="countryName"
                                    ng-change="submitCountryName()" class="form-control rounded-0 text-center">
-                            <div class="invalid-feedback" style=""> Zip code required.</div>
                         </div>
                         <div class="col-md-12 mb-3 text-center"><label>Select Item Type:</label>
                             <select ng-model="itemType" value="itemType" name="cars"
-                                    class="form-control rounded-0 text-center" ng-change="submitItemType()">
+                                    class="form-control rounded-0 text-center" ng-change="findByItemTypeEquals()">
                                 <option selected="selected">ALL</option>
                                 <option ng-repeat="itemType in itemTypes" value="{{itemType}}">{{itemType}}</option>
                             </select>
-                            <div class="invalid-feedback" style=""> Zip code required.</div>
                         </div>
                         <div class="col-md-12 text-center custom-control custom-slider mb-3 px-3">
                             <label>Select Price Less Than <
                                 <output name="ageOutputName" id="ageOutputId">700</output>
                             </label>
                             <input type="range" class="slider w-100 border-0" name="ageInputName" id="ageInputId"
-                                   min="0" max="700" step="10" value="700" oninput="ageOutputId.value = ageInputId.value"
-                                   ng-change="submitPrice()" ng-model="price"
+                                   min="0" max="700" step="10" value="700"
+                                   oninput="ageOutputId.value = ageInputId.value"
+                                   ng-change="findByUnitsPriceLessThan()" ng-model="price"
                                    ng-model-options="{updateOn: 'blur mouseup'}" style="">
-                            <div class="invalid-feedback" style=""> Zip code required.</div>
                         </div>
                     </div>
                     <div class="col-md-8 order-md-1 shadow-none">
@@ -259,10 +257,6 @@
         </p>
     </div>
 </footer>
-<pingendo onclick="window.open('https://pingendo.com/', '_blank')"
-          style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">
-    Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block"
-                                            alt="Pingendo logo" height="16"></pingendo>
 </body>
 
 </html>

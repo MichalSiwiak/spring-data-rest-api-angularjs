@@ -9,6 +9,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
     $scope.price = '700';
     $scope.itemTypes =[];
     $scope.itemType ='ALL';
+    $scope.countryName ='';
 
     $scope.form = {
         id: -1,
@@ -20,11 +21,36 @@ app.controller("SalesManagementController", function ($scope, $http) {
         totalCost: ""
     };
 
-    _findAll();
+    findAll();
     findDistinctByItemType();
 
 
-    $scope.submitPrice = function () {
+
+
+    $scope.findByCountryNameLike = function () {
+        $http({
+            method: 'POST',
+            url: '/crm/demo/countryName',
+            data: $scope.itemType,
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        }).then(success, error);
+    };
+
+
+    $scope.findByItemTypeEquals = function () {
+        $http({
+            method: 'POST',
+            url: '/crm/demo/itemType',
+            data: $scope.itemType,
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        }).then(success, error);
+    };
+
+    $scope.findByUnitsPriceLessThan = function () {
         $http({
             method: 'POST',
             url: '/crm/demo/price',
@@ -32,7 +58,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
             headers: {
                 'Content-Type': 'text/plain'
             }
-        }).then(_success, _error);
+        }).then(success, error);
     };
 
     function findDistinctByItemType() {
@@ -67,8 +93,8 @@ app.controller("SalesManagementController", function ($scope, $http) {
             }
         }).then(function successCallback(response) {
             $scope.message = response.headers('message');
-            _success();
-            _error(response);
+            success();
+            error(response);
         })
     };
 
@@ -79,8 +105,8 @@ app.controller("SalesManagementController", function ($scope, $http) {
             url: '/crm/demo/sales/' + sales.id
         }).then(function successCallback(response) {
             $scope.message = response.headers('message');
-            _success();
-            _error(response);
+            success();
+            error(response);
         })
     };
 
@@ -95,7 +121,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
     };
 
 
-    function _findAll() {
+    function findAll() {
         $http({
             method: 'GET',
             url: '/crm/demo/sales'
@@ -107,16 +133,16 @@ app.controller("SalesManagementController", function ($scope, $http) {
         });
     }
 
-    function _success() {
-        _findAll();
-        _clearForm()
+    function success() {
+        findAll();
+        clearForm()
     }
 
-    function _error(response) {
+    function error(response) {
         console.log(response.statusText);
     }
 
-    function _clearForm() {
+    function clearForm() {
         $scope.form.country = "";
         $scope.form.itemType = "";
         $scope.form.orderPriority = "";
