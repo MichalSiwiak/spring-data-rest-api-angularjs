@@ -120,7 +120,7 @@
                         <h4 class="my-2" contenteditable="true"><b>Filters:</b></h4>
                         <div class="col-md-12 mb-3 text-center"><label>Type Country Like:</label>
                             <input type="text" ng-model="countryName"
-                                   ng-change="submitCountryName()" class="form-control rounded-0 text-center">
+                                   ng-change="findByCountryNameLike()" class="form-control rounded-0 text-center">
                         </div>
                         <div class="col-md-12 mb-3 text-center"><label>Select Item Type:</label>
                             <select ng-model="itemType" value="itemType" name="cars"
@@ -193,6 +193,10 @@
                                                 type="submit">
                                             Save changes
                                         </button>
+                                        <%--<button ng-click="refresh()" class=" btn btn-block text-white btn-sm mr-3 mt-4
+                                                mb-0 btn-danger" type="button">
+                                            Refresh database
+                                        </button>--%>
                                     </div>
                                 </div>
                             </div>

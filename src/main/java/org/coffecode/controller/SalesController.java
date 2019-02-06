@@ -37,26 +37,12 @@ public class SalesController {
 
     @PostConstruct
     void init() {
-
-       /* System.out.println("Starting creating objects ... ");
-        List<Sales> salesList = readCsvData("C:\\Users\\msiwiak\\IdeaProjects\\projects\\spring-data-rest-api-angularjs\\src\\main\\resources\\sample.csv");
-
-        List<Sales> all = salesService.findAll();
-        for (Sales sales : all) {
-            salesService.deleteSales(sales);
-        }
-
-        for (Sales sales : salesList) {
-            salesService.saveSales(sales);
-        }*/
-
         salesListByItemTypeEquals = new SalesList();
         salesListByItemTypeEquals.setSalesList(salesService.findAll());
         salesListByCountryNameLike = new SalesList();
         salesListByCountryNameLike.setSalesList(salesService.findAll());
         salesListByUnitsPriceLessThan = new SalesList();
         salesListByUnitsPriceLessThan.setSalesList(salesService.findAll());
-
     }
 
     @GetMapping("/demo")
@@ -98,6 +84,35 @@ public class SalesController {
                 .setSalesList(salesService
                         .findByUnitsPriceLessThan(Double.parseDouble(price)));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/demo/refresh", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+    public ResponseEntity<String> refresh() {
+
+        List<Sales> salesListCsv = readCsvData("C:\\Users\\msiwiak\\IdeaProjects\\projects\\spring-data-rest-api-angularjs\\src\\main\\resources\\sample.csv");
+
+
+      /*  System.out.println(salesListCsv.size());
+        System.out.println(salesService.findAll().size());*/
+
+        /*  int number = 0;*/
+
+        for (Sales sales : salesService.findAll()) {
+            salesService.deleteSales(sales);
+        }
+        for (Sales sales : salesListCsv) {
+            /* number++;*/
+            /*   System.out.println(getNumber(number));*/
+            salesService.saveSales(sales);
+
+        }
+        init();
+        return new ResponseEntity<>("Successfully refreshed database! Number of records: " + salesListCsv.size(), HttpStatus.OK);
+    }
+
+
+    private int getNumber(int number) {
+        return number;
     }
 
 

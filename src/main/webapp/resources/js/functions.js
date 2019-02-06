@@ -1,15 +1,14 @@
 var app = angular.module("SalesManagement", []);
 
-//Controller Part
 app.controller("SalesManagementController", function ($scope, $http) {
 
     $scope.salesList = [];
     $scope.rowsNumberMessage = '';
     $scope.message = '';
     $scope.price = '700';
-    $scope.itemTypes =[];
-    $scope.itemType ='ALL';
-    $scope.countryName ='';
+    $scope.itemTypes = [];
+    $scope.itemType = 'ALL';
+    $scope.countryName = '';
 
     $scope.form = {
         id: -1,
@@ -25,17 +24,26 @@ app.controller("SalesManagementController", function ($scope, $http) {
     findDistinctByItemType();
 
 
-
-
     $scope.findByCountryNameLike = function () {
-        $http({
-            method: 'POST',
-            url: '/crm/demo/countryName',
-            data: $scope.itemType,
-            headers: {
-                'Content-Type': 'text/plain'
-            }
-        }).then(success, error);
+        if ($scope.countryName != "") {
+            $http({
+                method: "POST",
+                url: '/crm/demo/countryName',
+                data: $scope.countryName,
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            }).then(success, error);
+        } else {
+            $http({
+                method: "POST",
+                url: '/crm/demo/countryName',
+                data: 'all',
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            }).then(success, error);
+        }
     };
 
 
@@ -50,6 +58,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
         }).then(success, error);
     };
 
+
     $scope.findByUnitsPriceLessThan = function () {
         $http({
             method: 'POST',
@@ -61,6 +70,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
         }).then(success, error);
     };
 
+
     function findDistinctByItemType() {
         $http({
             method: 'GET',
@@ -71,6 +81,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
             console.log(response.statusText);
         });
     }
+
 
     $scope.submitSales = function () {
 
@@ -110,6 +121,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
         })
     };
 
+
     $scope.editSales = function (sales) {
         $scope.form.country = sales.country;
         $scope.form.itemType = sales.itemType;
@@ -133,14 +145,28 @@ app.controller("SalesManagementController", function ($scope, $http) {
         });
     }
 
+
+   /* $scope.refresh = function () {
+        $http({
+            method: 'GET',
+            url: '/crm/demo/refresh/'
+        }).then(function successCallback(response) {
+            success();
+            error(response);
+        })
+    };*/
+
+
     function success() {
         findAll();
         clearForm()
     }
 
+
     function error(response) {
         console.log(response.statusText);
     }
+
 
     function clearForm() {
         $scope.form.country = "";
@@ -151,4 +177,5 @@ app.controller("SalesManagementController", function ($scope, $http) {
         $scope.form.totalCost = "";
         $scope.form.id = -1;
     };
+
 });
