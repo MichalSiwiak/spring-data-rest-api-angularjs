@@ -1,9 +1,6 @@
 package org.coffecode.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -14,7 +11,7 @@ public class Sales {
 
     @Id
     @GeneratedValue
-    private long id;
+    private int id;
 
    /* private String region;*/
     private String country;
@@ -52,16 +49,11 @@ public class Sales {
         return id == sales.id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

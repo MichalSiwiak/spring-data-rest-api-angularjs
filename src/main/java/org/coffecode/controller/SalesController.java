@@ -3,10 +3,12 @@ package org.coffecode.controller;
 import org.coffecode.entity.Sales;
 import org.coffecode.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import static java.util.stream.Collectors.toList;
@@ -58,55 +60,53 @@ public class SalesController {
     }
 
     @GetMapping("/demo")
-    public String getDemo(){
-        return "crm-form2";
+    public String getDemo() {
+        return "crm-form";
     }
 
 
-   /* @RequestMapping(value = "/salesList", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
-    public ResponseEntity<List<Sales>> findAll() {
-        List<Sales> salesList = salesService.findAll();
-        return new ResponseEntity<>(salesList, HttpStatus.OK);
-    }*/
+    @RequestMapping(value = "/demo/countryName", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<String> findByCountryNameLike(@RequestBody String countryName) {
+        System.out.println(countryName);
+        if (countryName.equals("all")) {
+            salesListByCountryNameLike.setSalesList(salesService.findAll());
+        } else {
+            salesListByCountryNameLike.setSalesList(salesService.findByCountryNameLike(countryName));
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
-    @RequestMapping(value = "/distinctByItemType", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+    @RequestMapping(value = "/demo/itemTypes", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
     public ResponseEntity<List<String>> findDistinctByItemType() {
         List<String> itemTypes = salesService.findDistinctByItemType();
         return new ResponseEntity<>(itemTypes, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/itemTypeEquals", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
-    public ResponseEntity<List<Sales>> findByItemTypeEquals() {
-        List<Sales> salesList = salesService.findByItemTypeEquals("Meat");
-        return new ResponseEntity<>(salesList, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/countryNameLike", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
-    public ResponseEntity<List<Sales>> findByCountryNameLike() {
-        List<Sales> salesList = salesService.findByCountryNameLike("pol");
-        return new ResponseEntity<>(salesList, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/unitsPriceLessThan", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
-    public ResponseEntity<List<Sales>> findByUnitsPriceLessThan() {
-        List<Sales> salesList = salesService.findByUnitsPriceLessThan(50);
-        return new ResponseEntity<>(salesList, HttpStatus.OK);
-    }
-
-    private Sales getSalesById(int id) {
-        for (Sales sales : salesListTotal.getSalesList()) {
-            if (sales.getId() == id) {
-                return sales;
-            }
+    @RequestMapping(value = "/demo/itemType", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<String> findByItemTypeEquals(@RequestBody String itemType) {
+        if (itemType.equals("ALL")) {
+            salesListByItemTypeEquals.setSalesList(salesService.findAll());
+        } else {
+            salesListByItemTypeEquals.setSalesList(salesService.findByItemTypeEquals(itemType));
         }
-        return null;
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @RequestMapping(value = "/demo/price", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<String> findByUnitsPriceLessThan(@RequestBody String price) {
+        salesListByUnitsPriceLessThan
+                .setSalesList(salesService
+                        .findByUnitsPriceLessThan(Double.parseDouble(price)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 
     /**
      * HTTP GET - Get all countries
      */
     @RequestMapping(value = "/demo/sales", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
     public ResponseEntity<SalesList> findAll() {
+
         salesListTotal = new SalesList();
         salesListTotal.setSalesList(salesService.findAll());
 
@@ -124,23 +124,28 @@ public class SalesController {
         }
 
         salesListTotal.setSalesList(common);
-
-        return new ResponseEntity<>(salesListTotal, HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("rowsNumberMessage", "Number of rows returned: " + common.size() + ".");
+        return new ResponseEntity<>(salesListTotal, headers, HttpStatus.OK);
     }
 
     /**
      * HTTP POST - Create new sales
      */
     @RequestMapping(value = "/demo/sales", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity<String> createSales(@RequestBody Sales newSales) {
-        newSales.setId(salesListTotal.getSalesList().size() + 1);
-        salesService.saveSales(newSales);
+    public ResponseEntity<String> createSales(@RequestBody Sales newSales, Model model) {
+        newSales.setId(0);
+        System.out.println(newSales.toString());
+        int id = salesService.saveSales(newSales);
 
         salesListByItemTypeEquals.setSalesList(salesService.findAll());
         salesListByCountryNameLike.setSalesList(salesService.findAll());
         salesListByUnitsPriceLessThan.setSalesList(salesService.findAll());
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "Successfully added new row with id = " + id + ".");
+
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     /**
@@ -174,7 +179,10 @@ public class SalesController {
             //salesToUpdate.setTotalProfit(sales.getTotalProfit());
 
             salesService.saveSales(salesToUpdate);
-            return new ResponseEntity<>(salesToUpdate, HttpStatus.OK);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("message", "Successfully updated row with id = " + id + ".");
+            return new ResponseEntity<>(salesToUpdate, headers, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -191,13 +199,25 @@ public class SalesController {
             salesToDelete = getSalesById(id);
             if (salesToDelete != null) {
                 salesService.deleteSales(salesToDelete);
-                return new ResponseEntity<>(HttpStatus.OK);
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("message", "Successfully deleted row with id = " + id + ".");
+                return new ResponseEntity<>(headers, HttpStatus.OK);
             }
         } catch (Exception e) {
             System.out.println("Error fetching data");
         }
 
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    private Sales getSalesById(int id) {
+        for (Sales sales : salesListTotal.getSalesList()) {
+            if (sales.getId() == id) {
+                return sales;
+            }
+        }
+        return null;
     }
 
 
@@ -207,7 +227,6 @@ public class SalesController {
         String line = "";
         String cvsSplitBy = ",";
         DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-        int objectCounter = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             br.readLine(); // this will read the first line
@@ -232,15 +251,12 @@ public class SalesController {
                 //sales.setTotalProfit(Double.parseDouble(salesCsvLine[13]));
 
                 salesList.add(sales);
-
-                objectCounter++;
             }
-
-            System.out.println("Successfully created " + objectCounter + " objects.");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         return salesList;
     }
+
 }

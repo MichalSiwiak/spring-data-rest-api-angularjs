@@ -1,96 +1,32 @@
-var app = angular.module("UserManagement", []);
+var app = angular.module("SalesManagement", []);
 
 //Controller Part
-app.controller("UserManagementController", function ($scope, $http) {
+app.controller("SalesManagementController", function ($scope, $http) {
 
-    //Initialize page with default data which is blank in this example
-    $scope.countries = [];
-    $scope.sales = "";
-    $scope.name = "";
-    $scope.populationL = "2000000000";
+    $scope.salesList = [];
 
     $scope.form = {
         id: -1,
-        name: "",
-        continent: "",
-        surfaceArea: "",
-        indepYear: "",
-        population: "",
-        lifeExpectancy: ""
+        country: "",
+        itemType: "",
+        orderPriority: "",
+        unitsSold: "",
+        unitsPrice: "",
+        totalCost: ""
     };
 
-    //Now load the data from server
-    _refreshPageData();
-    _getAllContinents();
+    _findAll();
 
-    $scope.submitPopulationL = function () {
-        $http({
-            method: "POST",
-            url: '/crm/demo/population',
-            data: $scope.populationL,
-            headers: {
-                'Content-Type': 'text/plain'
-            }
-        }).then(_success, _error);
-    };
-
-    $scope.submitName = function () {
-        if ($scope.name != "") {
-            $http({
-                method: "POST",
-                url: '/crm/demo/name',
-                data: $scope.name,
-                headers: {
-                    'Content-Type': 'text/plain'
-                }
-            }).then(_success, _error);
-        } else {
-            $http({
-                method: "POST",
-                url: '/crm/demo/name',
-                data: 'all',
-                headers: {
-                    'Content-Type': 'text/plain'
-                }
-            }).then(_success, _error);
-        }
-    };
-
-    $scope.submitsales = function () {
-        $http({
-            method: "POST",
-            url: '/crm/demo/continent',
-            data: $scope.sales,
-            headers: {
-                'Content-Type': 'text/plain'
-            }
-        }).then(_success, _error);
-    };
-
-    function _getAllContinents() {
-        $http({
-            method: 'GET',
-            url: '/crm/demo/continents'
-        }).then(function successCallback(response) {
-            $scope.saless = response.data;
-        }, function errorCallback(response) {
-            console.log(response.statusText);
-        });
-    }
-
-    //HTTP POST/PUT methods for add/edit country
-    $scope.submitCountry = function () {
+    $scope.submitSales = function () {
 
         var method = "";
         var url = "";
         if ($scope.form.id == -1) {
-            //Id is absent so add country - POST operation
             method = "POST";
-            url = '/crm/demo/countries';
+            url = '/crm/demo/sales';
         } else {
-            //If Id is present, it's edit operation - PUT operation
             method = "PUT";
-            url = '/crm/demo/countries/' + $scope.form.id;
+            url = '/crm/demo/sales/' + $scope.form.id;
         }
 
         $http({
@@ -103,41 +39,38 @@ app.controller("UserManagementController", function ($scope, $http) {
         }).then(_success, _error);
     };
 
-    //HTTP DELETE- delete country by Id
-    $scope.removeCountry = function (country) {
+
+    $scope.deleteSales = function (sales) {
         $http({
             method: 'DELETE',
-            url: '/crm/demo/countries/' + country.id
+            url: '/crm/demo/sales/' + sales.id
         }).then(_success, _error);
     };
 
-    //In case of edit country, populate form with country data
-    $scope.editCountry = function (country) {
-        $scope.form.name = country.name;
-        $scope.form.continent = country.continent;
-        $scope.form.population = country.population;
-        $scope.form.lifeExpectancy = country.lifeExpectancy;
-        $scope.form.surfaceArea = country.surfaceArea;
-        $scope.form.indepYear = country.indepYear;
-        $scope.form.id = country.id;
+    $scope.editSales = function (sales) {
+        $scope.form.country = sales.country;
+        $scope.form.itemType = sales.itemType;
+        $scope.form.orderPriority = sales.orderPriority;
+        $scope.form.unitsSold = sales.unitsSold;
+        $scope.form.unitsPrice = sales.unitsPrice;
+        $scope.form.totalCost = sales.totalCost;
+        $scope.form.id = sales.id;
     };
 
-    /* Private Methods */
 
-    //HTTP GET- get all countries collection
-    function _refreshPageData() {
+    function _findAll() {
         $http({
             method: 'GET',
-            url: '/crm/demo/countries'
+            url: '/crm/demo/sales'
         }).then(function successCallback(response) {
-            $scope.countries = response.data.countries;
+            $scope.salesList = response.data.salesList;
         }, function errorCallback(response) {
             console.log(response.statusText);
         });
     }
 
     function _success() {
-        _refreshPageData();
+        _findAll();
         _clearForm()
     }
 
@@ -145,14 +78,13 @@ app.controller("UserManagementController", function ($scope, $http) {
         console.log(response.statusText);
     }
 
-    //Clear the form
     function _clearForm() {
-        $scope.form.name = "";
-        $scope.form.continent = "";
-        $scope.form.population = "";
-        $scope.form.lifeExpectancy = "";
-        $scope.form.surfaceArea = "";
-        $scope.form.indepYear = "";
+        $scope.form.country = "";
+        $scope.form.itemType = "";
+        $scope.form.orderPriority = "";
+        $scope.form.unitsSold = "";
+        $scope.form.unitsPrice = "";
+        $scope.form.totalCost = "";
         $scope.form.id = -1;
     };
 });

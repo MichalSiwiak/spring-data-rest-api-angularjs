@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SalesService {
 
-    public void saveSales(Sales sales);
+    public int saveSales(Sales sales);
 
     public List<Sales> findAll();
 

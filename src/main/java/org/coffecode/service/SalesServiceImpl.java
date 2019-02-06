@@ -16,8 +16,9 @@ public class SalesServiceImpl implements SalesService {
 
     @Transactional
     @Override
-    public void saveSales(Sales sales) {
+    public int saveSales(Sales sales) {
         salesDAO.saveSales(sales);
+        return sales.getId();
 
     }
 

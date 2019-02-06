@@ -34,27 +34,23 @@
 </head>
 
 
-<body ng-app="UserManagement" ng-controller="UserManagementController" class="bg-light text-dark" style="">
+<body ng-app="SalesManagement" ng-controller="SalesManagementController" class="bg-light text-dark" style="">
 <div id="wrap">
     <div id="main" class="clear-top">
-
-
-        <div class="collapse" id="navbarHeader">
+        <div class="collapse" id="navbarHeader" style="">
             <div class="container">
                 <div class="row">
                     <div class="col-md-7 py-4">
                         <h4>About</h4>
                         <p class="text-info">Free open source projects present different java solutions using spring,
-                            hibernate
-                            and other popular frameworks.</p>
+                            hibernate and other popular frameworks.</p>
                     </div>
                     <div class="col-md-3 offset-md-1 py-4">
                         <h4>Contact</h4>
                         <ul class="list-unstyled">
                             <li>
                                 <a href="https://pl.linkedin.com/in/michalsiwiak" class="text-secondary"
-                                   target="_blank">Follow
-                                    on LinkedIn</a>
+                                   target="_blank">Follow on LinkedIn</a>
                             </li>
                             <li>
                                 <a href="mailto:info@coffeecoding.net" target="_top" class="text-secondary">Email me</a>
@@ -64,14 +60,11 @@
                 </div>
             </div>
         </div>
-
-
         <div class="navbar sticky-top navbar-dark bg-info">
             <div class="container d-flex justify-content-between">
                 <a href="https://www.coffeecoding.net/" class="navbar-brand d-flex align-items-center"><i
                         class="fa fa-home fa-2x lead fa-fw d-inline-block" aria-hidden="true"></i>&nbsp;&nbsp;<text
-                        class="">
-                    HOME
+                        class=""> HOME
                 </text>
                 </a>
                 <a href="https://github.com/MichalSiwiak/spring-data-rest-api-angularjs" target="_blank"
@@ -100,8 +93,6 @@
                         class="navbar-toggler-icon"></span></button>
             </div>
         </div>
-
-
         <div class="text-center py-4 bg-secondary"
              style="	background-image: linear-gradient(to left, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.9));	background-position: top left;	background-size: 100%;	background-repeat: repeat;">
             <div class="container">
@@ -110,66 +101,109 @@
                         <h1 class="text-left text-primary">CRM System - Spring Data Rest Api</h1>
                         <p class="lead text-left">Implementation of database functionality using spring data. The
                             application sends sql queries (including CRUD methods) and receives data in JSON format. On
-                            the client side, the
-                            web application supports received JSON data using AngularJS.</p>
+                            the client side, the web application supports received JSON data using AngularJS.</p>
                     </div>
                 </div>
             </div>
         </div>
-
-
-        <div class="py-2">
-            <div class="container">
-                <form ng-submit="submitCountry()">
-                    <div class="row">
-                        <div class="col-md-4" style="">
-                            <div class="form-group"><label>Name</label> <input type="text" class="form-control"
-                                                                               ng-model="form.name"></div>
-                            <div class="form-group"><label>Continent</label> <input type="text" class="form-control"
-                                                                                    ng-model="form.continent"></div>
-                            <div class="form-group"><label>Surface area</label> <input type="number"
-                                                                                       class="form-control"
-                                                                                       ng-model="form.surfaceArea">
-                            </div>
-                        </div>
-                        <div class="col-md-4" style="">
-                            <div class="form-group"><label>Independence year</label> <input type="number"
-                                                                                            class="form-control"
-                                                                                            ng-model="form.indepYear">
-                            </div>
-                            <div class="form-group"><label>Population</label> <input type="number" class="form-control"
-                                                                                     ng-model="form.population"></div>
-                            <div class="form-group"><label>Life expectancy</label> <input type="number"
-                                                                                          class="form-control"
-                                                                                          ng-model="form.lifeExpectancy">
-                            </div>
-                        </div>
-                        <div class="col-md-4" style="">
-                            <div class="form-group"><label>Name Starts:</label> <input type="text" ng-model="name"
-                                                                                       ng-change="submitName()"
-                                                                                       class="form-control"></div>
-                            <div class="form-group"><label>Category</label> <select ng-model="sales" value="cokolwiek"
-                                                                                    name="cars" class="form-control"
-                                                                                    ng-change="submitsales()">
-                                <option ng-repeat="x in saless">{{x}}</option>
-                            </select></div>
-                            <label>Name Starts:
-                                <output name="ageOutputName" id="ageOutputId" class="mb-2">835031000</output>
-                            </label>
-                            <br>
-                            <input type="range" class="custom-range w-100" name="ageInputName" id="ageInputId" min="0"
-                                   max="2000000000" step="1000" oninput="ageOutputId.value = ageInputId.value"
-                                   ng-change="submitPopulationL()" ng-model="populationL"
-                                   ng-model-options="{updateOn: 'blur mouseup'}" style="">
-                        </div>
-                    </div>
-                    <div class="col-md-4" style="">
-                        <div class="row">
-                            <button type="submit" class="btn btn-success w-25">Save</button>
-                        </div>
-                    </div>
-                </form>
+        <div class="my-3">
+            <div style="height: 65px!important">
+                <div role="alert" class="alert text-dark text-center alert-warning">
+                    <i class="now-ui-icons ui-2_like lg pull-left mr-3"></i>
+                    <strong>{{message}}</strong>
+                    <span> {{rowsNumberMessage}}</span>
+                </div>
             </div>
+            <div class="container">
+                <div class="row shadow border-top">
+                    <div class="col-md-4 order-md-2 rounded-0 border-0 border-left-0 border-right">
+                        <h4 class="my-2" contenteditable="true"><b>Filters:</b></h4>
+                        <div class="col-md-12 mb-3 text-center"><label>Type Country Like:</label>
+                            <input type="text" ng-model="countryName"
+                                   ng-change="submitCountryName()" class="form-control rounded-0 text-center">
+                            <div class="invalid-feedback" style=""> Zip code required.</div>
+                        </div>
+                        <div class="col-md-12 mb-3 text-center"><label>Select Item Type:</label>
+                            <select ng-model="itemType" value="itemType" name="cars"
+                                    class="form-control rounded-0 text-center" ng-change="submitItemType()">
+                                <option selected="selected">ALL</option>
+                                <option ng-repeat="itemType in itemTypes" value="{{itemType}}">{{itemType}}</option>
+                            </select>
+                            <div class="invalid-feedback" style=""> Zip code required.</div>
+                        </div>
+                        <div class="col-md-12 text-center custom-control custom-slider mb-3 px-3">
+                            <label>Select Price Less Than <
+                                <output name="ageOutputName" id="ageOutputId">700</output>
+                            </label>
+                            <input type="range" class="slider w-100 border-0" name="ageInputName" id="ageInputId"
+                                   min="0" max="700" step="10" oninput="ageOutputId.value = ageInputId.value"
+                                   ng-change="submitPrice()" ng-model="price"
+                                   ng-model-options="{updateOn: 'blur mouseup'}" style="">
+                            <div class="invalid-feedback" style=""> Zip code required.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 order-md-1 shadow-none">
+                        <h4 class="my-2 mb-0"><b>New/Edit Record:</b></h4>
+                        <form ng-submit="submitSales()">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="col-md-12 mb-3 text-center"><label>Country</label>
+                                        <input type="text" ng-model="form.country"
+                                               required="true" class="form-control rounded-0 text-center">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-md-12 mb-3 text-center"><label>Item Type</label>
+                                        <input type="text" ng-model="form.itemType"
+                                               required="true" class="form-control rounded-0 text-center">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-md-12 mb-3 text-center"><label>Order Priority</label>
+                                        <input type="text" ng-model="form.orderPriority"
+                                               required="true" class="form-control rounded-0 text-center">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="col-md-12 mb-3 text-center"><label>Units Price</label>
+                                        <input min="0" max="100000000" step="0.01"
+                                               type="number" ng-model="form.unitsPrice" ng-model="form.country"
+                                               required="true" class="form-control rounded-0 text-center">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-md-12 mb-3 text-center"><label>Units Sold</label>
+                                        <input min="0" max="100000000" step="0.01"
+                                               type="number" ng-model="form.unitsSold" ng-model="form.unitsPrice"
+                                               required="true" class="form-control rounded-0 text-center">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-md-12 mb-3 text-center"><label>Total Cost</label>
+                                        <input min="0" max="100000000" step="0.01"
+                                               type="number" ng-model="form.totalCost" ng-model="form.country"
+                                               required="true" class="form-control rounded-0 text-center">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-12 mb-3 text-center">
+                                        <button class="btn btn-block text-dark btn-sm mr-3 mt-4 mb-0 btn-warning"
+                                                type="submit">
+                                            Save changes
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-2">
             <div class="py-5">
                 <div class="container">
                     <div class="row">
@@ -178,31 +212,31 @@
                                 <table class="table table-striped">
                                     <thead class="thead-light">
                                     <tr class="text-center">
-                                        <th>Name</th>
-                                        <th>Continent</th>
-                                        <th>Surface area</th>
-                                        <th>Independence</th>
-                                        <th>Population</th>
-                                        <th>Life expectancy</th>
+                                        <th>country</th>
+                                        <th>itemType</th>
+                                        <th>orderPriority</th>
+                                        <th>unitsSold</th>
+                                        <th>unitsPrice</th>
+                                        <th>totalCost</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody class="text-center">
-                                    <tr ng-repeat="country in countries">
-                                        <td>{{ country.name }}</td>
-                                        <td>{{ country.continent }}</td>
-                                        <td>{{ country.surfaceArea }}</td>
-                                        <td>{{ country.indepYear }}</td>
-                                        <td>{{ country.population }}</td>
-                                        <td>{{ country.lifeExpectancy }}</td>
+                                    <tr ng-repeat="sale in salesList">
+                                        <td>{{ sale.country }}</td>
+                                        <td>{{ sale.itemType }}</td>
+                                        <td>{{ sale.orderPriority }}</td>
+                                        <td>{{ sale.unitsSold }}</td>
+                                        <td>{{ sale.unitsPrice }}</td>
+                                        <td>{{ sale.totalCost }}</td>
                                         <td class="text-center">
-                                            <a class="btn btn-sm text-dark btn-primary"
-                                               ng-click="editCountry( country )"><i
+                                            <a title="Edit" class="btn btn-sm text-dark btn-primary"
+                                               ng-click="editSales( sale )"><i
                                                     class="fa fa-pencil-square-o fa-lg text-dark"
                                                     aria-hidden="true"></i></a>
-                                            <a class="btn btn-sm text-dark btn-warning"
-                                               ng-click="removeCountry( country )"><i
-                                                    class="fa fa-trash fa-lg text-dark" aria-hidden="true"></i></a>
+                                            <a title="Delete" class="btn btn-sm text-dark btn-warning"
+                                               ng-click="deleteSales( sale )"><i class="fa fa-trash fa-lg text-dark"
+                                                                                 aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -213,11 +247,8 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
-
 <footer class="footer bg-dark text-muted">
     <div class="container">
         <p class="float-right">
@@ -228,7 +259,10 @@
         </p>
     </div>
 </footer>
-
-
+<pingendo onclick="window.open('https://pingendo.com/', '_blank')"
+          style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">
+    Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block"
+                                            alt="Pingendo logo" height="16"></pingendo>
 </body>
+
 </html>

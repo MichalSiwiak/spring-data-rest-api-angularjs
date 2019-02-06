@@ -17,10 +17,10 @@ public class SalesDAOImpl implements SalesDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public void saveSales(Sales sales) {
+    public int saveSales(Sales sales) {
         Session currentSession = sessionFactory.getCurrentSession();
         currentSession.saveOrUpdate(sales);
-
+        return sales.getId();
     }
 
     @Override
