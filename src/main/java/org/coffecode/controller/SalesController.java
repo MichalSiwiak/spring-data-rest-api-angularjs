@@ -67,7 +67,7 @@ public class SalesController {
 
     @RequestMapping(value = "/demo/countryName", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
     public ResponseEntity<String> findByCountryNameLike(@RequestBody String countryName) {
-        System.out.println(countryName);
+
         if (countryName.equals("all")) {
             salesListByCountryNameLike.setSalesList(salesService.findAll());
         } else {
@@ -135,7 +135,6 @@ public class SalesController {
     @RequestMapping(value = "/demo/sales", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
     public ResponseEntity<String> createSales(@RequestBody Sales newSales, Model model) {
         newSales.setId(0);
-        System.out.println(newSales.toString());
         int id = salesService.saveSales(newSales);
 
         salesListByItemTypeEquals.setSalesList(salesService.findAll());

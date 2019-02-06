@@ -4,6 +4,9 @@ var app = angular.module("SalesManagement", []);
 app.controller("SalesManagementController", function ($scope, $http) {
 
     $scope.salesList = [];
+    $scope.rowsNumberMessage = '';
+    $scope.message = '';
+    $scope.price = '';
 
     $scope.form = {
         id: -1,
@@ -16,6 +19,21 @@ app.controller("SalesManagementController", function ($scope, $http) {
     };
 
     _findAll();
+
+
+    $scope.submitPrice = function () {
+        $http({
+            method: 'POST',
+            url: '/demo/price',
+            data: $scope.price,
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        }).then(function successCallback(response) {
+            _success();
+            _error(response);
+        })
+    };
 
     $scope.submitSales = function () {
 
@@ -36,7 +54,11 @@ app.controller("SalesManagementController", function ($scope, $http) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(_success, _error);
+        }).then(function successCallback(response) {
+            $scope.message = response.headers('message');
+            _success();
+            _error(response);
+        })
     };
 
 
@@ -44,7 +66,11 @@ app.controller("SalesManagementController", function ($scope, $http) {
         $http({
             method: 'DELETE',
             url: '/crm/demo/sales/' + sales.id
-        }).then(_success, _error);
+        }).then(function successCallback(response) {
+            $scope.message = response.headers('message');
+            _success();
+            _error(response);
+        })
     };
 
     $scope.editSales = function (sales) {
@@ -64,8 +90,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
             url: '/crm/demo/sales'
         }).then(function successCallback(response) {
             $scope.salesList = response.data.salesList;
-            console.log(response.headers('rowsNumberMessage'));
-            console.log(response.headers('rowsNumberMessage'));
+            $scope.rowsNumberMessage = response.headers('rowsNumberMessage');
         }, function errorCallback(response) {
             console.log(response.statusText);
         });
