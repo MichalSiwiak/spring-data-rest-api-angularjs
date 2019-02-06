@@ -38,7 +38,7 @@ public class SalesController {
     @PostConstruct
     void init() {
 
-        System.out.println("Starting creating objects ... ");
+       /* System.out.println("Starting creating objects ... ");
         List<Sales> salesList = readCsvData("C:\\Users\\msiwiak\\IdeaProjects\\projects\\spring-data-rest-api-angularjs\\src\\main\\resources\\sample.csv");
 
         List<Sales> all = salesService.findAll();
@@ -48,7 +48,7 @@ public class SalesController {
 
         for (Sales sales : salesList) {
             salesService.saveSales(sales);
-        }
+        }*/
 
         salesListByItemTypeEquals = new SalesList();
         salesListByItemTypeEquals.setSalesList(salesService.findAll());

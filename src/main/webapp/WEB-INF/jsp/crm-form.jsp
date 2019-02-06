@@ -136,7 +136,7 @@
                                 <output name="ageOutputName" id="ageOutputId">700</output>
                             </label>
                             <input type="range" class="slider w-100 border-0" name="ageInputName" id="ageInputId"
-                                   min="0" max="700" step="10" oninput="ageOutputId.value = ageInputId.value"
+                                   min="0" max="700" step="10" value="700" oninput="ageOutputId.value = ageInputId.value"
                                    ng-change="submitPrice()" ng-model="price"
                                    ng-model-options="{updateOn: 'blur mouseup'}" style="">
                             <div class="invalid-feedback" style=""> Zip code required.</div>

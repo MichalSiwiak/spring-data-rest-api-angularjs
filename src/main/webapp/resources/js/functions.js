@@ -6,7 +6,9 @@ app.controller("SalesManagementController", function ($scope, $http) {
     $scope.salesList = [];
     $scope.rowsNumberMessage = '';
     $scope.message = '';
-    $scope.price = '';
+    $scope.price = '700';
+    $scope.itemTypes =[];
+    $scope.itemType ='ALL';
 
     $scope.form = {
         id: -1,
@@ -19,21 +21,30 @@ app.controller("SalesManagementController", function ($scope, $http) {
     };
 
     _findAll();
+    findDistinctByItemType();
 
 
     $scope.submitPrice = function () {
         $http({
             method: 'POST',
-            url: '/demo/price',
+            url: '/crm/demo/price',
             data: $scope.price,
             headers: {
                 'Content-Type': 'text/plain'
             }
-        }).then(function successCallback(response) {
-            _success();
-            _error(response);
-        })
+        }).then(_success, _error);
     };
+
+    function findDistinctByItemType() {
+        $http({
+            method: 'GET',
+            url: '/crm/demo/itemTypes'
+        }).then(function successCallback(response) {
+            $scope.itemTypes = response.data;
+        }, function errorCallback(response) {
+            console.log(response.statusText);
+        });
+    }
 
     $scope.submitSales = function () {
 
