@@ -1,6 +1,6 @@
-package org.coffecode.service;
+package net.coffeecoding.service;
 
-import org.coffecode.entity.Sales;
+import net.coffeecoding.entity.Sales;
 
 import java.util.List;
 

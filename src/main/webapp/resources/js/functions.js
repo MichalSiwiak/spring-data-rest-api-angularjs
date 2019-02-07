@@ -28,7 +28,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
         if ($scope.countryName != "") {
             $http({
                 method: "POST",
-                url: '/crm/demo/countryName',
+                url: 'countryName',
                 data: $scope.countryName,
                 headers: {
                     'Content-Type': 'text/plain'
@@ -37,7 +37,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
         } else {
             $http({
                 method: "POST",
-                url: '/crm/demo/countryName',
+                url: 'countryName',
                 data: 'all',
                 headers: {
                     'Content-Type': 'text/plain'
@@ -50,7 +50,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
     $scope.findByItemTypeEquals = function () {
         $http({
             method: 'POST',
-            url: '/crm/demo/itemType',
+            url: 'itemType',
             data: $scope.itemType,
             headers: {
                 'Content-Type': 'text/plain'
@@ -62,7 +62,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
     $scope.findByUnitsPriceLessThan = function () {
         $http({
             method: 'POST',
-            url: '/crm/demo/price',
+            url: 'price',
             data: $scope.price,
             headers: {
                 'Content-Type': 'text/plain'
@@ -74,7 +74,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
     function findDistinctByItemType() {
         $http({
             method: 'GET',
-            url: '/crm/demo/itemTypes'
+            url: 'itemTypes'
         }).then(function successCallback(response) {
             $scope.itemTypes = response.data;
         }, function errorCallback(response) {
@@ -89,10 +89,10 @@ app.controller("SalesManagementController", function ($scope, $http) {
         var url = "";
         if ($scope.form.id == -1) {
             method = "POST";
-            url = '/crm/demo/sales';
+            url = 'sales';
         } else {
             method = "PUT";
-            url = '/crm/demo/sales/' + $scope.form.id;
+            url = 'sales/' + $scope.form.id;
         }
 
         $http({
@@ -113,7 +113,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
     $scope.deleteSales = function (sales) {
         $http({
             method: 'DELETE',
-            url: '/crm/demo/sales/' + sales.id
+            url: 'sales/' + sales.id
         }).then(function successCallback(response) {
             $scope.message = response.headers('message');
             success();
@@ -136,7 +136,7 @@ app.controller("SalesManagementController", function ($scope, $http) {
     function findAll() {
         $http({
             method: 'GET',
-            url: '/crm/demo/sales'
+            url: 'sales'
         }).then(function successCallback(response) {
             $scope.salesList = response.data.salesList;
             $scope.rowsNumberMessage = response.headers('rowsNumberMessage');
@@ -144,18 +144,6 @@ app.controller("SalesManagementController", function ($scope, $http) {
             console.log(response.statusText);
         });
     }
-
-
-   /* $scope.refresh = function () {
-        $http({
-            method: 'GET',
-            url: '/crm/demo/refresh/'
-        }).then(function successCallback(response) {
-            success();
-            error(response);
-        })
-    };*/
-
 
     function success() {
         findAll();

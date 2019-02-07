@@ -1,7 +1,7 @@
-package org.coffecode.service;
+package net.coffeecoding.service;
 
-import org.coffecode.dao.SalesDAO;
-import org.coffecode.entity.Sales;
+import net.coffeecoding.dao.SalesDAO;
+import net.coffeecoding.entity.Sales;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

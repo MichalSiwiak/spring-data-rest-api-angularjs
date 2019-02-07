@@ -1,33 +1,32 @@
-package org.coffecode.controller;
+package net.coffeecoding.controller;
 
-import org.coffecode.entity.Sales;
-import org.coffecode.service.SalesService;
+import net.coffeecoding.entity.Sales;
+import net.coffeecoding.service.SalesService;
+import net.coffeecoding.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import static java.util.stream.Collectors.toList;
 
 import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 public class SalesController {
 
     @Autowired
     private SalesService salesService;
+    @Autowired
+    Utils utils;
+    @Autowired
+    private ServletContext servletContext;
 
     private SalesList salesListTotal;
     private SalesList salesListByItemTypeEquals;
@@ -36,7 +35,8 @@ public class SalesController {
 
 
     @PostConstruct
-    void init() {
+    private void init() {
+
         salesListByItemTypeEquals = new SalesList();
         salesListByItemTypeEquals.setSalesList(salesService.findAll());
         salesListByCountryNameLike = new SalesList();
@@ -51,7 +51,7 @@ public class SalesController {
     }
 
 
-    @RequestMapping(value = "/demo/countryName", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
+    @RequestMapping(value = "/countryName", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
     public ResponseEntity<String> findByCountryNameLike(@RequestBody String countryName) {
 
         if (countryName.equals("all")) {
@@ -62,13 +62,13 @@ public class SalesController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/demo/itemTypes", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+    @RequestMapping(value = "/itemTypes", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
     public ResponseEntity<List<String>> findDistinctByItemType() {
         List<String> itemTypes = salesService.findDistinctByItemType();
         return new ResponseEntity<>(itemTypes, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/demo/itemType", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
+    @RequestMapping(value = "/itemType", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
     public ResponseEntity<String> findByItemTypeEquals(@RequestBody String itemType) {
         if (itemType.equals("ALL")) {
             salesListByItemTypeEquals.setSalesList(salesService.findAll());
@@ -78,7 +78,7 @@ public class SalesController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/demo/price", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
+    @RequestMapping(value = "/price", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
     public ResponseEntity<String> findByUnitsPriceLessThan(@RequestBody String price) {
         salesListByUnitsPriceLessThan
                 .setSalesList(salesService
@@ -86,40 +86,25 @@ public class SalesController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/demo/refresh", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+    @RequestMapping(value = "/refresh", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
     public ResponseEntity<String> refresh() {
 
-        List<Sales> salesListCsv = readCsvData("C:\\Users\\msiwiak\\IdeaProjects\\projects\\spring-data-rest-api-angularjs\\src\\main\\resources\\sample.csv");
-
-
-      /*  System.out.println(salesListCsv.size());
-        System.out.println(salesService.findAll().size());*/
-
-        /*  int number = 0;*/
+        List<Sales> salesListCsv = utils.readCsvData(servletContext.getRealPath("/WEB-INF/data/sample.csv"));
 
         for (Sales sales : salesService.findAll()) {
             salesService.deleteSales(sales);
         }
         for (Sales sales : salesListCsv) {
-            /* number++;*/
-            /*   System.out.println(getNumber(number));*/
             salesService.saveSales(sales);
-
         }
         init();
         return new ResponseEntity<>("Successfully refreshed database! Number of records: " + salesListCsv.size(), HttpStatus.OK);
     }
 
-
-    private int getNumber(int number) {
-        return number;
-    }
-
-
     /**
      * HTTP GET - Get all countries
      */
-    @RequestMapping(value = "/demo/sales", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+    @RequestMapping(value = "/sales", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
     public ResponseEntity<SalesList> findAll() {
 
         salesListTotal = new SalesList();
@@ -147,8 +132,8 @@ public class SalesController {
     /**
      * HTTP POST - Create new sales
      */
-    @RequestMapping(value = "/demo/sales", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity<String> createSales(@RequestBody Sales newSales, Model model) {
+    @RequestMapping(value = "/sales", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<String> createSales(@RequestBody Sales newSales) {
         newSales.setId(0);
         int id = salesService.saveSales(newSales);
 
@@ -165,7 +150,7 @@ public class SalesController {
     /**
      * HTTP PUT - Update sales
      */
-    @RequestMapping(value = "/demo/sales/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
+    @RequestMapping(value = "/sales/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
     public ResponseEntity<Sales> updateSales(@PathVariable("id") int id, @RequestBody Sales sales) {
 
         Sales salesToUpdate = new Sales();
@@ -205,7 +190,7 @@ public class SalesController {
     /**
      * HTTP DELETE - Delete sales
      */
-    @RequestMapping(value = "/demo/sales/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/sales/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteSales(@PathVariable("id") int id) {
 
         Sales salesToDelete;
@@ -232,45 +217,6 @@ public class SalesController {
             }
         }
         return null;
-    }
-
-
-    private List<Sales> readCsvData(String path) {
-
-        List<Sales> salesList = new ArrayList<>();
-        String line = "";
-        String cvsSplitBy = ",";
-        DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            br.readLine(); // this will read the first line
-            while ((line = br.readLine()) != null) {
-
-                Sales sales = new Sales();
-                String[] salesCsvLine = line.split(cvsSplitBy);
-
-                //sales.setRegion(salesCsvLine[0]);
-                sales.setCountry(salesCsvLine[1]);
-                sales.setItemType(salesCsvLine[2]);
-                //sales.setSalesChannel(salesCsvLine[3]);
-                sales.setOrderPriority(salesCsvLine[4]);
-                //sales.setOrderDate(new Timestamp(format.parse(salesCsvLine[5]).getTime()));
-                //sales.setOrderId(salesCsvLine[6]);
-                //sales.setShipDate(new Timestamp(format.parse(salesCsvLine[7]).getTime()));
-                sales.setUnitsSold(Integer.parseInt(salesCsvLine[8]));
-                sales.setUnitsPrice(Double.parseDouble(salesCsvLine[9]));
-                //sales.setUnitsCost(Double.parseDouble(salesCsvLine[10]));
-                //sales.setTotalRevenue(Double.parseDouble(salesCsvLine[11]));
-                sales.setTotalCost(Double.parseDouble(salesCsvLine[12]));
-                //sales.setTotalProfit(Double.parseDouble(salesCsvLine[13]));
-
-                salesList.add(sales);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return salesList;
     }
 
 }

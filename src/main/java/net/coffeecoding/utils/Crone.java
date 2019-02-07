@@ -1,4 +1,4 @@
-package org.coffecode;
+package net.coffeecoding.utils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -9,10 +9,10 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 
-public class Test {
+public class Crone {
     public static void main(String[] args) {
         HttpClient client = HttpClientBuilder.create().build();
-        HttpGet request = new HttpGet("http://localhost:8080/crm/demo/refresh");
+        HttpGet request = new HttpGet("http://localhost:8080/crm/refresh");
 
         try {
             HttpResponse response = client.execute(request);

@@ -1,6 +1,6 @@
-package org.coffecode.dao;
+package net.coffeecoding.dao;
 
-import org.coffecode.entity.Sales;
+import net.coffeecoding.entity.Sales;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

@@ -1,4 +1,4 @@
-package org.coffecode.config;
+package net.coffeecoding.config;
 
 import java.beans.PropertyVetoException;
 import java.util.Properties;
@@ -25,7 +25,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
-@ComponentScan("org.coffecode")
+@ComponentScan("net.coffeecoding")
 @PropertySource({"classpath:persistence-mysql.properties"})
 public class AppConfig implements WebMvcConfigurer {
 

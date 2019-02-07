@@ -1,6 +1,6 @@
-package org.coffecode.controller;
+package net.coffeecoding.controller;
 
-import org.coffecode.entity.Sales;
+import net.coffeecoding.entity.Sales;
 
 import java.util.List;
 

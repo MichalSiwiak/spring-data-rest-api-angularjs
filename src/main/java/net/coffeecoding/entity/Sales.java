@@ -1,8 +1,6 @@
-package org.coffecode.entity;
+package net.coffeecoding.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Objects;
 
 
 @Entity

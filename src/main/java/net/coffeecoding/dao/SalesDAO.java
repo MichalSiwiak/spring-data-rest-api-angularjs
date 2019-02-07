@@ -1,6 +1,6 @@
-package org.coffecode.dao;
+package net.coffeecoding.dao;
 
-import org.coffecode.entity.Sales;
+import net.coffeecoding.entity.Sales;
 
 import java.util.List;
 
