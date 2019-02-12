@@ -214,12 +214,12 @@
                                 <table class="table table-striped">
                                     <thead class="thead-light">
                                     <tr class="text-center">
-                                        <th>country</th>
-                                        <th>itemType</th>
-                                        <th>orderPriority</th>
-                                        <th>unitsSold</th>
-                                        <th>unitsPrice</th>
-                                        <th>totalCost</th>
+                                        <th>Country</th>
+                                        <th>Item Type</th>
+                                        <th>Order Priority</th>
+                                        <th>Units Sold</th>
+                                        <th>Units Price</th>
+                                        <th>Total Cost</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
