@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Crone {
     public static void main(String[] args) {
         HttpClient client = HttpClientBuilder.create().build();
-        HttpGet request = new HttpGet("http://localhost:8080/crm/refresh");
+        HttpGet request = new HttpGet("http://localhost:8080/refresh");
 
         try {
             HttpResponse response = client.execute(request);
